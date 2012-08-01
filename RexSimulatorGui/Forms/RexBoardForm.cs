@@ -50,7 +50,7 @@ namespace RexSimulatorGui.Forms
         private DateTime mLastTickCountUpdate = DateTime.Now;
         public double mLastClockRate = TARGET_CLOCK_RATE;
         private double mLastClockRateSmoothed = TARGET_CLOCK_RATE;
-        private long mSlowdownCount = 1000000000;
+        private long mSlowdownCount = 1;
 
         private bool mRunning = true;
         private bool mStepping = false;
@@ -116,6 +116,9 @@ namespace RexSimulatorGui.Forms
         /// </summary>
         private void Worker()
         {
+            int stepCount = 0;
+            int stepsPerSleep = 0;
+
             while (true)
             {
                 if (mRunning)
@@ -126,13 +129,22 @@ namespace RexSimulatorGui.Forms
                     //Slow the processor down if need be
                     if (THROTTLE_CLOCK_RATE)
                     {
-                        for (long i = 0; i < mSlowdownCount / 1000000000; i++) ; //dirty cpu cycle-wasting loop                        
+                        if (stepCount++ >= stepsPerSleep)
+                        {
+                            stepCount -= stepsPerSleep;
+                            Thread.Sleep(5);
+                            int diff = (int)mLastClockRate - (int)TARGET_CLOCK_RATE;
+                            stepsPerSleep -= diff / 10000;
+                            stepsPerSleep = Math.Min(Math.Max(0, stepsPerSleep), 1000000);
+                        }
+
+                        /*for (long i = 0; i < mSlowdownCount / 1000000000; i++) ; //dirty cpu cycle-wasting loop                        
 
                         long diff = (long)mLastClockRate - TARGET_CLOCK_RATE;
 
                         mSlowdownCount += diff;
 
-                        Thread.Sleep(0); //swap thread out to allow other processes to run.
+                        Thread.Sleep(0); //swap thread out to allow other processes to run.*/
                     }
                 }
             }
@@ -241,7 +253,7 @@ namespace RexSimulatorGui.Forms
             mLastTickCount = mRexBoard.TickCounter;
             mLastTickCountUpdate = DateTime.Now;
 
-            double rate = 0.01;
+            double rate = 0.5;
             mLastClockRate = ticksSinceLastUpdate / timeSinceLastUpdate.TotalSeconds;
             mLastClockRateSmoothed = mLastClockRateSmoothed * (1.0 - rate) + mLastClockRate * rate;
 
@@ -259,6 +271,7 @@ namespace RexSimulatorGui.Forms
             mStepping = false;
             mRunning ^= true;
             ((Button)sender).Text = mRunning ? "Stop" : "Run";
+            ((Button)sender).BackColor = mRunning ? Color.Green : Color.Red;
         }
 
         /// <summary>

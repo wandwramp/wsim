@@ -147,7 +147,14 @@ namespace RexSimulator.Hardware
                         {
                             mAlu.Func = mIR.Func;
                             mAlu.Rs = mGpRegisters[mIR.Rs];
+
                             mAlu.Rt = mIR.Immed16;
+                            if ((((uint)mIR.Func) & 1) == 0) //if this instruction is signed, sign-extend it
+                            {
+                                if ((mAlu.Rt & 0x8000) != 0)
+                                    mAlu.Rt |= 0xFFFF0000;
+                            }
+
                             mGpRegisters[mIR.Rd] = mAlu.Result;
                         }
                         break;

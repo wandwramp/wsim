@@ -78,18 +78,19 @@
             this.stepButton.TabIndex = 8;
             this.stepButton.Text = "Single Step";
             this.stepButton.UseVisualStyleBackColor = true;
-            this.stepButton.Visible = false;
             this.stepButton.Click += new System.EventHandler(this.stepButton_Click);
             // 
             // runButton
             // 
+            this.runButton.BackColor = System.Drawing.Color.Red;
+            this.runButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.runButton.ForeColor = System.Drawing.Color.White;
             this.runButton.Location = new System.Drawing.Point(695, 20);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(75, 23);
             this.runButton.TabIndex = 7;
             this.runButton.Text = "Stop";
-            this.runButton.UseVisualStyleBackColor = true;
-            this.runButton.Visible = false;
+            this.runButton.UseVisualStyleBackColor = false;
             this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
             // interruptButtonCheckbox

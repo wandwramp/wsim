@@ -159,19 +159,19 @@ namespace RexSimulatorGui.Forms
 
                 //Set new locations
                 if (0 <= newPc && newPc < mDevice.Size)
-                    mVirtualItems[(int)newPc].SubItems[0].Text = "$pc =>";
+                    mVirtualItems[(int)newPc].SubItems[0].Text += "$pc ";
 
                 if (0 <= newSp && newSp < mDevice.Size)
-                    mVirtualItems[(int)newSp].SubItems[0].Text = "$sp =>";
+                    mVirtualItems[(int)newSp].SubItems[0].Text += "$sp ";
 
                 if (0 <= newRa && newRa < mDevice.Size)
-                    mVirtualItems[(int)newRa].SubItems[0].Text = "$ra =>";
+                    mVirtualItems[(int)newRa].SubItems[0].Text += "$ra ";
 
                 if (0 <= newEvec && newEvec < mDevice.Size)
-                    mVirtualItems[(int)newEvec].SubItems[0].Text = "$evec =>";
+                    mVirtualItems[(int)newEvec].SubItems[0].Text += "$evec ";
 
                 if (0 <= newEar && newEar < mDevice.Size)
-                    mVirtualItems[(int)newEar].SubItems[0].Text = "$ear =>";
+                    mVirtualItems[(int)newEar].SubItems[0].Text += "$ear ";
 
                 //Redraw any affected items
                 RedrawItem(mPc, mSp, mRa, mEvec, mEar, newPc, newSp, newSp, newRa, newEvec, newEvec);

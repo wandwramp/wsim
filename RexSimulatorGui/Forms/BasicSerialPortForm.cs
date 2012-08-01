@@ -185,7 +185,7 @@ namespace RexSimulatorGui.Forms
         private void serialTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
-            mSerialPort.Send(e.KeyChar);
+            mSerialPort.SendAsync(e.KeyChar);
         }
 
         /// <summary>
@@ -283,13 +283,25 @@ namespace RexSimulatorGui.Forms
                     else if(mEscapeSequence.Contains(';') && mEscapeSequence.EndsWith("H")) //go to XY co-ordinate
                     {
                         string[] split = mEscapeSequence.Split(new char[] { '[', ';', 'H' }, StringSplitOptions.RemoveEmptyEntries);
-                        mCX = int.Parse(split[1]);
-                        mCY = int.Parse(split[0]);
+                        try
+                        {
+                            int x = int.Parse(split[1]);
+                            int y = int.Parse(split[0]);
+
+                            mCX = Math.Min(Math.Max(0, x), NUM_COLS);
+                            mCY = Math.Min(Math.Max(0, y), NUM_ROWS);
+                        }
+                        catch { }
                         mEscapeSequence = null;
                     }
                     else if (mEscapeSequence == "[?25l") //cursor off
                     {
                         SetCursorVisible(false);
+                        mEscapeSequence = null;
+                    }
+                    else if (mEscapeSequence.Length > 10)
+                    {
+                        MessageBox.Show("Warning - the serial port received an invalid / unsupported ASCII escape sequence.", "Invalid Escape Sequence", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         mEscapeSequence = null;
                     }
                 }
