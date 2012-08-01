@@ -30,8 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.stepButton = new System.Windows.Forms.Button();
-            this.runButton = new System.Windows.Forms.Button();
             this.interruptButtonCheckbox = new System.Windows.Forms.CheckBox();
             this.timerConfigCheckbox = new System.Windows.Forms.CheckBox();
             this.parallelConfigCheckbox = new System.Windows.Forms.CheckBox();
@@ -43,16 +41,19 @@
             this.serialForm2Checkbox = new System.Windows.Forms.CheckBox();
             this.serialForm1Checkbox = new System.Windows.Forms.CheckBox();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.stepButton = new System.Windows.Forms.Button();
+            this.runButton = new System.Windows.Forms.Button();
             this.rexWidget1 = new RexSimulatorGui.Controls.RexWidget();
+            this.cbFullSpeed = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.stepButton);
-            this.groupBox1.Controls.Add(this.runButton);
             this.groupBox1.Controls.Add(this.interruptButtonCheckbox);
             this.groupBox1.Controls.Add(this.timerConfigCheckbox);
             this.groupBox1.Controls.Add(this.parallelConfigCheckbox);
@@ -65,33 +66,10 @@
             this.groupBox1.Controls.Add(this.serialForm1Checkbox);
             this.groupBox1.Location = new System.Drawing.Point(13, 607);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(776, 112);
+            this.groupBox1.Size = new System.Drawing.Size(666, 112);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Show Forms";
-            // 
-            // stepButton
-            // 
-            this.stepButton.Location = new System.Drawing.Point(694, 50);
-            this.stepButton.Name = "stepButton";
-            this.stepButton.Size = new System.Drawing.Size(75, 23);
-            this.stepButton.TabIndex = 8;
-            this.stepButton.Text = "Single Step";
-            this.stepButton.UseVisualStyleBackColor = true;
-            this.stepButton.Click += new System.EventHandler(this.stepButton_Click);
-            // 
-            // runButton
-            // 
-            this.runButton.BackColor = System.Drawing.Color.Red;
-            this.runButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.runButton.ForeColor = System.Drawing.Color.White;
-            this.runButton.Location = new System.Drawing.Point(695, 20);
-            this.runButton.Name = "runButton";
-            this.runButton.Size = new System.Drawing.Size(75, 23);
-            this.runButton.TabIndex = 7;
-            this.runButton.Text = "Stop";
-            this.runButton.UseVisualStyleBackColor = false;
-            this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
             // interruptButtonCheckbox
             // 
@@ -209,6 +187,41 @@
             // 
             this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.cbFullSpeed);
+            this.groupBox2.Controls.Add(this.stepButton);
+            this.groupBox2.Controls.Add(this.runButton);
+            this.groupBox2.Location = new System.Drawing.Point(685, 613);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(108, 106);
+            this.groupBox2.TabIndex = 2;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Control";
+            // 
+            // stepButton
+            // 
+            this.stepButton.Location = new System.Drawing.Point(6, 48);
+            this.stepButton.Name = "stepButton";
+            this.stepButton.Size = new System.Drawing.Size(96, 23);
+            this.stepButton.TabIndex = 10;
+            this.stepButton.Text = "Single Step";
+            this.stepButton.UseVisualStyleBackColor = true;
+            this.stepButton.Click += new System.EventHandler(this.stepButton_Click);
+            // 
+            // runButton
+            // 
+            this.runButton.BackColor = System.Drawing.Color.Green;
+            this.runButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.runButton.ForeColor = System.Drawing.Color.White;
+            this.runButton.Location = new System.Drawing.Point(6, 19);
+            this.runButton.Name = "runButton";
+            this.runButton.Size = new System.Drawing.Size(96, 23);
+            this.runButton.TabIndex = 9;
+            this.runButton.Text = "Stop";
+            this.runButton.UseVisualStyleBackColor = false;
+            this.runButton.Click += new System.EventHandler(this.runButton_Click);
+            // 
             // rexWidget1
             // 
             this.rexWidget1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -220,11 +233,23 @@
             this.rexWidget1.Size = new System.Drawing.Size(800, 600);
             this.rexWidget1.TabIndex = 0;
             // 
+            // cbFullSpeed
+            // 
+            this.cbFullSpeed.AutoSize = true;
+            this.cbFullSpeed.Location = new System.Drawing.Point(7, 78);
+            this.cbFullSpeed.Name = "cbFullSpeed";
+            this.cbFullSpeed.Size = new System.Drawing.Size(76, 17);
+            this.cbFullSpeed.TabIndex = 11;
+            this.cbFullSpeed.Text = "Full Speed";
+            this.cbFullSpeed.UseVisualStyleBackColor = true;
+            this.cbFullSpeed.CheckedChanged += new System.EventHandler(this.cbFullSpeed_CheckedChanged);
+            // 
             // RexBoardForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 731);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.rexWidget1);
             this.MaximizeBox = false;
@@ -235,6 +260,8 @@
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.RexBoardForm_Paint);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -254,8 +281,10 @@
         private System.Windows.Forms.CheckBox serialConfig1Checkbox;
         private System.Windows.Forms.Timer updateTimer;
         private System.Windows.Forms.CheckBox interruptButtonCheckbox;
-        private System.Windows.Forms.Button runButton;
+        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button stepButton;
+        private System.Windows.Forms.Button runButton;
+        private System.Windows.Forms.CheckBox cbFullSpeed;
 
 
     }

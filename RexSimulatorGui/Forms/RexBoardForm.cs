@@ -23,10 +23,6 @@ namespace RexSimulatorGui.Forms
         /// The clock rate that the simulator should (try to) run at, if throttling is enabled.
         /// </summary>
         private const long TARGET_CLOCK_RATE = 4000000;
-        /// <summary>
-        /// Set true if the simulated CPU should not exceed TARGET_CLOCK_RATE.
-        /// </summary>
-        private const bool THROTTLE_CLOCK_RATE = true;
         #endregion
 
         #region Member Variables
@@ -50,7 +46,7 @@ namespace RexSimulatorGui.Forms
         private DateTime mLastTickCountUpdate = DateTime.Now;
         public double mLastClockRate = TARGET_CLOCK_RATE;
         private double mLastClockRateSmoothed = TARGET_CLOCK_RATE;
-        private long mSlowdownCount = 1;
+        private bool mThrottleCpu = true;
 
         private bool mRunning = true;
         private bool mStepping = false;
@@ -127,7 +123,7 @@ namespace RexSimulatorGui.Forms
                     mRunning ^= mStepping; //stop the CPU running if this is only supposed to do a single step.
 
                     //Slow the processor down if need be
-                    if (THROTTLE_CLOCK_RATE)
+                    if (mThrottleCpu)
                     {
                         if (stepCount++ >= stepsPerSleep)
                         {
@@ -285,6 +281,16 @@ namespace RexSimulatorGui.Forms
                 runButton.PerformClick();
             mStepping = true;
             mRunning = true;
+        }
+
+        /// <summary>
+        /// Toggle CPU throttling.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbFullSpeed_CheckedChanged(object sender, EventArgs e)
+        {
+            mThrottleCpu = !((CheckBox)sender).Checked;
         }
         #endregion
     }
