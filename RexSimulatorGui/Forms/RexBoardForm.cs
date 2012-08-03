@@ -61,7 +61,7 @@ namespace RexSimulatorGui.Forms
             mRexBoard = rexWidget1.mBoard;
 
             //Load WRAMPmon into ROM
-            Stream wmon = new MemoryStream(Resources.monitor);
+            Stream wmon = new MemoryStream(ASCIIEncoding.ASCII.GetBytes(Resources.monitor_srec));
             rexWidget1.LoadSrec(wmon);
             wmon.Close();
 
