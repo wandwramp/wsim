@@ -117,6 +117,12 @@ namespace RexSimulatorGui.Forms
 
             while (true)
             {
+                if (mRunning && mRamForm.Breakpoints.Contains(mRexBoard.CPU.PC)) //stop the CPU if a breakpoint has been hit
+                {
+                    this.Invoke(new Action(runButton.PerformClick));
+                    continue;
+                }
+
                 if (mRunning)
                 {
                     rexWidget1.Step();
@@ -231,7 +237,6 @@ namespace RexSimulatorGui.Forms
         /// <param name="e"></param>
         private void RexBoardForm_Paint(object sender, PaintEventArgs e)
         {
-
             rexWidget1.Invalidate();
         }
         #endregion

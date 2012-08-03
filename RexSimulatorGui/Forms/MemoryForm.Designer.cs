@@ -62,6 +62,7 @@
             this.memoryListView.View = System.Windows.Forms.View.Details;
             this.memoryListView.VirtualMode = true;
             this.memoryListView.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.memoryListView_RetrieveVirtualItem);
+            this.memoryListView.DoubleClick += new System.EventHandler(this.memoryListView_DoubleClick);
             // 
             // columnHeader1
             // 

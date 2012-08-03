@@ -25,6 +25,18 @@ namespace RexSimulatorGui.Forms
         private uint[] mShadow;
 
         private ListViewItem[] mVirtualItems;
+
+        private List<uint> mBreakpoints;
+        #endregion
+
+        #region Accessors
+        /// <summary>
+        /// Gets a list of currently set breakpoints.
+        /// </summary>
+        public List<uint> Breakpoints
+        {
+            get { return mBreakpoints; }
+        }
         #endregion
 
         #region Constructor
@@ -42,6 +54,7 @@ namespace RexSimulatorGui.Forms
             this.mShadow = new uint[mem.Size];
             this.mVirtualItems = new ListViewItem[mem.Size];
             memoryListView.VirtualListSize = (int)mem.Size;
+            mBreakpoints = new List<uint>();
 
             //Populate view buffer
             for (uint i = 0; i < mDevice.Size; i++)
@@ -215,6 +228,37 @@ namespace RexSimulatorGui.Forms
         {
             GotoAddress(mEar, "$ear");
         }
+
+        /// <summary>
+        /// Sets or removes a breakpoint.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void memoryListView_DoubleClick(object sender, EventArgs e)
+        {
+            if (memoryListView.SelectedIndices.Count == 1)
+            {
+                uint addr = (uint)memoryListView.SelectedIndices[0];
+                if (mBreakpoints.Contains(addr))
+                {
+                    mBreakpoints.Remove(addr);
+                    mVirtualItems[addr].SubItems[1].Text = addr.ToString("X8");
+                }
+                else
+                {
+                    if (addr == mCpu.mSpRegisters[RegisterFile.SpRegister.evec])
+                    {
+                        MessageBox.Show("It is not possible to place a breakpoint at the same address at $evec, since the CPU will execute the instruction at the address specified by $evec before it has a chance to break execution.", "Invalid Breakpoint", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    mBreakpoints.Add(addr);
+                    mVirtualItems[addr].SubItems[1].Text = addr.ToString("X8") + " [B]";
+                }
+
+                RedrawItem(addr);
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -231,5 +275,6 @@ namespace RexSimulatorGui.Forms
             menuStrip1.Show();
         }
         #endregion
+
     }
 }
