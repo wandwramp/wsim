@@ -18,7 +18,11 @@ namespace RexSimulator.Hardware.Rex
         /// <summary>
         /// The control register.
         /// </summary>
-        public uint Control { get { return mMemory[0]; } set { mMemory[0] = value; } }
+        public uint Control
+        {
+            get { return mMemory[0]; }
+            set { mMemory[0] = value; }
+        }
 
         /// <summary>
         /// The load register.
@@ -26,18 +30,17 @@ namespace RexSimulator.Hardware.Rex
         public uint Load
         {
             get { return mMemory[1] & 0xFFFF; }
-            set
-            {
-                mMemory[1] = value;
-                if ((value & 1) != 0)
-                    Count = Load;
-            }
+            set { mMemory[1] = value & 0xFFFF; }
         }
 
         /// <summary>
         /// The count register.
         /// </summary>
-        public uint Count { get { return mMemory[2] & 0xFFFF; } set { mMemory[2] = value; } }
+        public uint Count
+        {
+            get { return mMemory[2] & 0xFFFF; }
+            set { mMemory[2] = value; }
+        }
 
         /// <summary>
         /// The status register.
@@ -70,7 +73,7 @@ namespace RexSimulator.Hardware.Rex
                 //Do timer events
                 if ((Control & 1) != 0) //if enabled
                 {
-                    if (Count-- == 0)
+                    if (Count == 0)
                     {
                         if ((Control & 2) != 0) //if automatic restart
                         {
@@ -78,8 +81,9 @@ namespace RexSimulator.Hardware.Rex
                         }
                         else
                         {
-                            Control = 0; //disable timer - is this correct behaviour?
+                            Control = 0; //single shot: disable timer
                         }
+
                         if (InterruptAck == 1)
                         {
                             Interrupt(true);
@@ -91,6 +95,9 @@ namespace RexSimulator.Hardware.Rex
                         }
                     }
                 }
+
+                if ((Control & 1) != 0) //decrement if still enabled
+                    Count--;
             }
         }
         #endregion
@@ -98,9 +105,9 @@ namespace RexSimulator.Hardware.Rex
         #region Overrides
         public override void Write()
         {
-            if (mAddressBus.Value - mBaseAddress == 0)
+            if (mAddressBus.Value - mBaseAddress == 0) //if writing to the control register
             {
-                if ((mMemory[0] & 1) == 1 && (mDataBus.Value & 1) == 0)
+                if ((mDataBus.Value & 1) != 0) //copy Load to Count when turning on the timer
                     Count = Load;
             }
             else if (mAddressBus.Value - mBaseAddress == 2) //count register is read only.
