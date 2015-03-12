@@ -114,9 +114,9 @@ namespace RexSimulator.Hardware
                         else
                         {
                             mAlu.Func = mIR.Func;
-                            mAlu.Rs = mGpRegisters[mIR.Rs];
-                            mAlu.Rt = mGpRegisters[mIR.Rt];
-                            mGpRegisters[mIR.Rd] = mAlu.Result;
+                            mAlu.Rs = mGpRegisters[(RegisterFile.GpRegister)mIR.Rs];
+                            mAlu.Rt = mGpRegisters[(RegisterFile.GpRegister)mIR.Rt];
+                            mGpRegisters[(RegisterFile.GpRegister)mIR.Rd] = mAlu.Result;
                         }
                         break;
 
@@ -134,11 +134,11 @@ namespace RexSimulator.Hardware
                                 switch (mIR.Func)
                                 {
                                     case IR.Function.movgs:
-                                        mSpRegisters[mIR.Rd] = mGpRegisters[mIR.Rs];
+                                        mSpRegisters[(RegisterFile.SpRegister)mIR.Rd] = mGpRegisters[(RegisterFile.GpRegister)mIR.Rs];
                                         break;
 
                                     case IR.Function.movsg:
-                                        mGpRegisters[mIR.Rd] = mSpRegisters[mIR.Rs];
+                                        mGpRegisters[(RegisterFile.GpRegister)mIR.Rd] = mSpRegisters[(RegisterFile.SpRegister)mIR.Rs];
                                         break;
                                 }
                             }
@@ -146,7 +146,7 @@ namespace RexSimulator.Hardware
                         else
                         {
                             mAlu.Func = mIR.Func;
-                            mAlu.Rs = mGpRegisters[mIR.Rs];
+                            mAlu.Rs = mGpRegisters[(RegisterFile.GpRegister)mIR.Rs];
 
                             mAlu.Rt = mIR.Immed16;
                             if ((((uint)mIR.Func) & 1) == 0) //if this instruction is signed, sign-extend it
@@ -155,7 +155,7 @@ namespace RexSimulator.Hardware
                                     mAlu.Rt |= 0xFFFF0000;
                             }
 
-                            mGpRegisters[mIR.Rd] = mAlu.Result;
+                            mGpRegisters[(RegisterFile.GpRegister)mIR.Rd] = mAlu.Result;
                         }
                         break;
 
@@ -164,7 +164,7 @@ namespace RexSimulator.Hardware
                         break;
 
                     case IR.Opcode.jr:
-                        mPC = mGpRegisters[mIR.Rs];
+                        mPC = mGpRegisters[(RegisterFile.GpRegister)mIR.Rs];
                         break;
 
                     case IR.Opcode.jal:
@@ -176,28 +176,28 @@ namespace RexSimulator.Hardware
                         goto case IR.Opcode.jr; //OK, I used a goto. Shoot me.
 
                     case IR.Opcode.lw:
-                        mAddressBus.Write((uint)(mGpRegisters[mIR.Rs] + mIR.Immed20));
-                        mGpRegisters[mIR.Rd] = mDataBus.Value;
+                        mAddressBus.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.Immed20));
+                        mGpRegisters[(RegisterFile.GpRegister)mIR.Rd] = mDataBus.Value;
                         break;
 
                     case IR.Opcode.sw:
                         mAddressBus.IsWrite = true;
-                        mAddressBus.Write((uint)(mGpRegisters[mIR.Rs] + mIR.Immed20));
-                        mDataBus.Write(mGpRegisters[mIR.Rd]);
+                        mAddressBus.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.Immed20));
+                        mDataBus.Write(mGpRegisters[(RegisterFile.GpRegister)mIR.Rd]);
                         break;
 
                     case IR.Opcode.beqz:
-                        if (mGpRegisters[mIR.Rs] == 0)
+                        if (mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] == 0)
                             mPC = (uint)(mPC + mIR.SignedImmed20);
                         break;
 
                     case IR.Opcode.bnez:
-                        if (mGpRegisters[mIR.Rs] != 0)
+                        if (mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] != 0)
                             mPC = (uint)(mPC + mIR.SignedImmed20);
                         break;
 
                     case IR.Opcode.la:
-                        mGpRegisters[mIR.Rd] = mIR.Immed20;
+                        mGpRegisters[(RegisterFile.GpRegister)mIR.Rd] = mIR.Immed20;
                         break;
 
                     default:
@@ -253,7 +253,7 @@ namespace RexSimulator.Hardware
 
                     //back up necessary registers
                     mSpRegisters[RegisterFile.SpRegister.ear] = mPC;
-                    mSpRegisters[RegisterFile.SpRegister.ers] = mGpRegisters[13];
+                    mSpRegisters[RegisterFile.SpRegister.ers] = mGpRegisters[RegisterFile.GpRegister.r13];
 
                     //Jump to interrupt handler
                     mPC = mSpRegisters[RegisterFile.SpRegister.evec];
@@ -273,7 +273,7 @@ namespace RexSimulator.Hardware
             uint oieku = (mSpRegisters[RegisterFile.SpRegister.cctrl] & 0x5) << 1;
             uint cctrlt = (mSpRegisters[RegisterFile.SpRegister.cctrl] & 0xFFFFFFFA) | oieku;
             mSpRegisters[RegisterFile.SpRegister.cctrl] = cctrlt;
-            mGpRegisters[13] = mSpRegisters[RegisterFile.SpRegister.ers];
+            mGpRegisters[RegisterFile.GpRegister.r13] = mSpRegisters[RegisterFile.SpRegister.ers];
             mPC = mSpRegisters[RegisterFile.SpRegister.ear];
         }
         #endregion
@@ -317,8 +317,8 @@ namespace RexSimulator.Hardware
                 mIR.Instruction = mDataBus.Value;
 
                 mTicksToNextInstruction = mIR.TicksRequired;
-                if (mIR.OpCode == IR.Opcode.bnez && mGpRegisters[mIR.Rs] != 0 ||
-                    mIR.OpCode == IR.Opcode.beqz && mGpRegisters[mIR.Rs] == 0)
+                if (mIR.OpCode == IR.Opcode.bnez && mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] != 0 ||
+                    mIR.OpCode == IR.Opcode.beqz && mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] == 0)
                 {
                     mTicksToNextInstruction++;
                 }

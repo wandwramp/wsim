@@ -44,8 +44,18 @@ namespace RexSimulatorGui.Forms
                 RegisterFile.GpRegister greg = (RegisterFile.GpRegister)i;
                 RegisterFile.SpRegister sreg = (RegisterFile.SpRegister)i;
 
-                uint v = mReg[i];
-                string name = mIsSpecial ? mSpRegNames[i] : mGpRegNames[i];
+                uint v;
+                string name;
+                if (mIsSpecial)
+                {
+                    v = mReg[(RegisterFile.SpRegister)i];
+                    name = mSpRegNames[i];
+                }
+                else
+                {
+                    v = mReg[(RegisterFile.GpRegister)i];
+                    name = mGpRegNames[i];
+                }
 
                 listView1.Items.Add(new ListViewItem(new string[] { name, v.ToString(), v.ToString("X8"), Convert.ToString(v, 2).PadLeft(32, '0') }));
             }
