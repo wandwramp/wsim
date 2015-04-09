@@ -71,7 +71,7 @@ namespace RexSimulator.Hardware.Rex
             set
             {
                 Status &= 0xFFFFFFFD;
-                mMemory[0] = value;
+                mMemory[0] = value & 0xFF;
                 mClocksToTransmit = ClocksPerSymbol;
             }
         }
@@ -89,7 +89,7 @@ namespace RexSimulator.Hardware.Rex
             set
             {
                 mClocksToReceive = ClocksPerSymbol;
-                mRecvValue = value;
+                mRecvValue = value & 0xFF;
             }
         }
 

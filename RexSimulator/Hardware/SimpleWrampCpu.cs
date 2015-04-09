@@ -176,13 +176,13 @@ namespace RexSimulator.Hardware
                         goto case IR.Opcode.jr; //OK, I used a goto. Shoot me.
 
                     case IR.Opcode.lw:
-                        mAddressBus.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.Immed20));
+                        mAddressBus.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.SignedImmed20) & 0xfffff);
                         mGpRegisters[(RegisterFile.GpRegister)mIR.Rd] = mDataBus.Value;
                         break;
 
                     case IR.Opcode.sw:
                         mAddressBus.IsWrite = true;
-                        mAddressBus.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.Immed20));
+                        mAddressBus.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.SignedImmed20) & 0xfffff);
                         mDataBus.Write(mGpRegisters[(RegisterFile.GpRegister)mIR.Rd]);
                         break;
 
