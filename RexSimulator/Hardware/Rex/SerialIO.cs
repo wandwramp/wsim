@@ -149,6 +149,9 @@ namespace RexSimulator.Hardware.Rex
                     default: mMemory[address] = mDataBus.Value; break;
                 }
             }
+
+            if (mIrqBus != null)
+                mIrqBus.SetBit(mIrqNumber, mMemory[mIrqOffset] != 0);
         }
 
         /// <summary>

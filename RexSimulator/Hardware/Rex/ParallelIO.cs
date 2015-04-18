@@ -114,6 +114,9 @@ namespace RexSimulator.Hardware.Rex
 
             if (mAddressBus.Value == mBaseAddress + 2 || mAddressBus.Value == mBaseAddress + 3)
                 SSD_Changed = true;
+
+            if (mIrqBus != null)
+                mIrqBus.SetBit(mIrqNumber, mMemory[mIrqOffset] != 0);
         }
         #endregion
     }
