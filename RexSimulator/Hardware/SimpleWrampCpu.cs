@@ -135,6 +135,10 @@ namespace RexSimulator.Hardware
                                 {
                                     case IR.Function.movgs:
                                         mSpRegisters[(RegisterFile.SpRegister)mIR.Rd] = mGpRegisters[(RegisterFile.GpRegister)mIR.Rs];
+
+                                        //For some reason, the hardware fires off a GPF when explicitly setting the KU bit to zero.
+                                        if ((mSpRegisters[RegisterFile.SpRegister.cctrl] & 0x00000008) == 0)
+                                            mInterruptStatus |= (uint)ExceptionSource.GPF;
                                         break;
 
                                     case IR.Function.movsg:

@@ -263,7 +263,7 @@ namespace RexSimulator.Hardware
         /// <param name="start"></param>
         /// <param name="len"></param>
         /// <returns></returns>
-        public string Disassemble(uint start, uint len)
+        public string Disassemble(uint start, uint len, string format = "0x{0:X5}: 0x{1:X8} {2}")
         {
             StringBuilder sb = new StringBuilder();
             IR ir = new IR();
@@ -273,7 +273,7 @@ namespace RexSimulator.Hardware
             {
                 mAddressBus.Write(address);
                 ir.Instruction = mDataBus.Value;
-                sb.AppendLine(string.Format("0x{0:X5}: 0x{1:X8} {2}", address, ir.Instruction, ir.ToString()));
+                sb.AppendLine(string.Format(format, address, ir.Instruction, ir.ToString()));
             }
 
             return sb.ToString();
