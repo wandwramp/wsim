@@ -27,7 +27,7 @@ namespace RexSimulator.Hardware.Rex
         /// <summary>
         /// The load register.
         /// </summary>
-        public uint Load
+        public new uint Load
         {
             get { return mMemory[1] & 0xFFFF; }
             set { mMemory[1] = value & 0xFFFF; }

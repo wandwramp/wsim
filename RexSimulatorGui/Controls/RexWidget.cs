@@ -23,7 +23,7 @@ namespace RexSimulatorGui.Controls
         /// <summary>
         /// The control that currently has mouse focus.
         /// </summary>
-        private enum ActiveControl { None, Reset, Interrupt, Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7, Button0, Button1, Duck };
+        private enum ControlWithFocus { None, Reset, Interrupt, Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7, Button0, Button1, Duck };
         #endregion
 
         #region Members
@@ -41,7 +41,7 @@ namespace RexSimulatorGui.Controls
         private Point mDuckLoc = new Point(351, 209);
 
         
-        private ActiveControl mActiveControl = ActiveControl.None;
+        private ControlWithFocus mActiveControl = ControlWithFocus.None;
         #endregion
 
         public RexWidget()
@@ -67,33 +67,33 @@ namespace RexSimulatorGui.Controls
         /// Gets the control currently under the mouse pointer.
         /// </summary>
         /// <returns></returns>
-        private ActiveControl GetActiveControl(Point mouseLoc)
+        private ControlWithFocus GetActiveControl(Point mouseLoc)
         {
             mouseLoc.X = mouseLoc.X * Resources.RexBoardPhoto.Width / this.Width;
             mouseLoc.Y = mouseLoc.Y * Resources.RexBoardPhoto.Height/ this.Height;
 
             if (Distance(mouseLoc, mResetLoc) < mButtonRad)
-                return ActiveControl.Reset;
+                return ControlWithFocus.Reset;
 
             if (Distance(mouseLoc, mInterruptLoc) < mButtonRad)
-                return ActiveControl.Interrupt;
+                return ControlWithFocus.Interrupt;
 
             if (Distance(mouseLoc, mDuckLoc) < mDuckRad)
-                return ActiveControl.Duck;
+                return ControlWithFocus.Duck;
 
             for (int i = 0; i < mButtonLoc.Length; i++)
             {
                 if (Distance(mouseLoc, mButtonLoc[i]) < mButtonRad)
-                    return ActiveControl.Button0 + i;
+                    return ControlWithFocus.Button0 + i;
             }
 
             for (int i = 0; i < mSwitchLoc.Length; i++)
             {
                 if (Distance(mouseLoc, mSwitchLoc[i]) < mButtonRad)
-                    return ActiveControl.Switch0 + i;
+                    return ControlWithFocus.Switch0 + i;
             }
 
-            return ActiveControl.None;
+            return ControlWithFocus.None;
             
         }
         #endregion
@@ -207,17 +207,17 @@ namespace RexSimulatorGui.Controls
         private void DrawButtons(Graphics g)
         {
             //Reset
-            Brush b = (mActiveControl == ActiveControl.Reset) ? Brushes.Red : Brushes.DarkRed;
+            Brush b = (mActiveControl == ControlWithFocus.Reset) ? Brushes.Red : Brushes.DarkRed;
             DrawButton(g, mResetLoc, b);
 
             //Interrupt
-            b = (mActiveControl == ActiveControl.Interrupt) ? Brushes.DarkGray : Brushes.Gray;
+            b = (mActiveControl == ControlWithFocus.Interrupt) ? Brushes.DarkGray : Brushes.Gray;
             DrawButton(g, mInterruptLoc, b);
 
             //Parallel Buttons
             for(int i=0; i < mButtonLoc.Length; i++)
             {
-                b = (mActiveControl == (ActiveControl)(ActiveControl.Button0 + i)) ? Brushes.DarkGray : Brushes.Gray;
+                b = (mActiveControl == (ControlWithFocus)(ControlWithFocus.Button0 + i)) ? Brushes.DarkGray : Brushes.Gray;
                 DrawButton(g, mButtonLoc[i], b);
             }
         }
@@ -249,7 +249,7 @@ namespace RexSimulatorGui.Controls
         {
             for (int i = 0; i < mSwitchLoc.Length; i++)
             {
-                Brush b = (mActiveControl == (ActiveControl)(ActiveControl.Switch0 + i)) ? Brushes.LightGray : Brushes.White;
+                Brush b = (mActiveControl == (ControlWithFocus)(ControlWithFocus.Switch0 + i)) ? Brushes.LightGray : Brushes.White;
                 DrawSwitch(g, mSwitchLoc[i], b, i);
             }
         }
@@ -295,17 +295,17 @@ namespace RexSimulatorGui.Controls
         {
             switch (mActiveControl)
             {
-                case ActiveControl.Reset:
+                case ControlWithFocus.Reset:
                     uint switchBk = mBoard.Parallel.Switches;
                     mBoard.Reset();
                     mBoard.Parallel.Switches = switchBk;
                     break;
 
-                case ActiveControl.Interrupt:
+                case ControlWithFocus.Interrupt:
                     mBoard.InterruptButton.PressButton();
                     break;
 
-                case ActiveControl.Duck:
+                case ControlWithFocus.Duck:
                     SoundPlayer sp = new SoundPlayer(Resources.duck_quack);
                     sp.Play();
                     break;
@@ -313,7 +313,7 @@ namespace RexSimulatorGui.Controls
 
             for (int i = 0; i < mSwitchLoc.Length; i++)
             {
-                if (mActiveControl == ActiveControl.Switch0 + i)
+                if (mActiveControl == ControlWithFocus.Switch0 + i)
                 {
                     mBoard.Parallel.Switches ^= (1u << i);
                 }
@@ -329,11 +329,11 @@ namespace RexSimulatorGui.Controls
         {
             switch (mActiveControl)
             {
-                case ActiveControl.Button0:
+                case ControlWithFocus.Button0:
                     mBoard.Parallel.Buttons |= 1;
                     break;
 
-                case ActiveControl.Button1:
+                case ControlWithFocus.Button1:
                     mBoard.Parallel.Buttons |= 2;
                     break;
             }
