@@ -23,7 +23,7 @@ namespace RexSimulatorGui.Controls
         /// <summary>
         /// The control that currently has mouse focus.
         /// </summary>
-        private enum ControlWithFocus { None, Reset, Interrupt, Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7, Button0, Button1, Duck };
+        private enum ControlWithFocus { None, Reset, Interrupt, Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7, Button0, Button1, ButtonBoth, Duck };
         #endregion
 
         #region Members
@@ -72,21 +72,28 @@ namespace RexSimulatorGui.Controls
             mouseLoc.X = mouseLoc.X * Resources.RexBoardPhoto.Width / this.Width;
             mouseLoc.Y = mouseLoc.Y * Resources.RexBoardPhoto.Height/ this.Height;
 
+            //Reset Button
             if (Distance(mouseLoc, mResetLoc) < mButtonRad)
                 return ControlWithFocus.Reset;
 
+            //User Interrupt Button
             if (Distance(mouseLoc, mInterruptLoc) < mButtonRad)
                 return ControlWithFocus.Interrupt;
 
+            //Quacker
             if (Distance(mouseLoc, mDuckLoc) < mDuckRad)
                 return ControlWithFocus.Duck;
 
+            //Push Buttons
             for (int i = 0; i < mButtonLoc.Length; i++)
             {
                 if (Distance(mouseLoc, mButtonLoc[i]) < mButtonRad)
                     return ControlWithFocus.Button0 + i;
             }
+            if (Distance(mouseLoc, mButtonLoc[0]) + Distance(mouseLoc, mButtonLoc[1]) < 3 * mButtonRad)
+                return ControlWithFocus.ButtonBoth;
 
+            //Switches
             for (int i = 0; i < mSwitchLoc.Length; i++)
             {
                 if (Distance(mouseLoc, mSwitchLoc[i]) < mButtonRad)
@@ -215,11 +222,11 @@ namespace RexSimulatorGui.Controls
             DrawButton(g, mInterruptLoc, b);
 
             //Parallel Buttons
-            for(int i=0; i < mButtonLoc.Length; i++)
-            {
-                b = (mActiveControl == (ControlWithFocus)(ControlWithFocus.Button0 + i)) ? Brushes.DarkGray : Brushes.Gray;
-                DrawButton(g, mButtonLoc[i], b);
-            }
+            b = (mActiveControl == ControlWithFocus.Button0 || mActiveControl == ControlWithFocus.ButtonBoth) ? Brushes.DarkGray : Brushes.Gray;
+            DrawButton(g, mButtonLoc[0], b);
+
+            b = (mActiveControl == ControlWithFocus.Button1 || mActiveControl == ControlWithFocus.ButtonBoth) ? Brushes.DarkGray : Brushes.Gray;
+            DrawButton(g, mButtonLoc[1], b);
         }
 
         /// <summary>
@@ -330,11 +337,15 @@ namespace RexSimulatorGui.Controls
             switch (mActiveControl)
             {
                 case ControlWithFocus.Button0:
-                    mBoard.Parallel.Buttons |= 1;
+                    mBoard.Parallel.Buttons = 1;
                     break;
 
                 case ControlWithFocus.Button1:
-                    mBoard.Parallel.Buttons |= 2;
+                    mBoard.Parallel.Buttons = 2;
+                    break;
+
+                case ControlWithFocus.ButtonBoth:
+                    mBoard.Parallel.Buttons = 3;
                     break;
             }
         }
