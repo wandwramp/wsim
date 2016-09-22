@@ -65,7 +65,7 @@ namespace RexSimulator.Hardware.Rex
         /// <summary>
         /// Gets the state of both SSDs.
         /// </summary>
-        public uint SSD { get { return LeftSSD << 4 | RightSSD; } }
+        public uint SSD { get { return ((LeftSSD & 0xf) << 4) | (RightSSD & 0xf); } }
 
         /// <summary>
         /// The control register.

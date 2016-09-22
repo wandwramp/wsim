@@ -42,6 +42,8 @@
             this.raToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.evecToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.earToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rbaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ptableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -106,45 +108,61 @@
             this.spToolStripMenuItem,
             this.raToolStripMenuItem,
             this.evecToolStripMenuItem,
-            this.earToolStripMenuItem});
+            this.earToolStripMenuItem,
+            this.rbaseToolStripMenuItem,
+            this.ptableToolStripMenuItem});
             this.goToToolStripMenuItem.Name = "goToToolStripMenuItem";
-            this.goToToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
+            this.goToToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.goToToolStripMenuItem.Text = "Go To";
             // 
             // pcToolStripMenuItem
             // 
             this.pcToolStripMenuItem.Name = "pcToolStripMenuItem";
-            this.pcToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.pcToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.pcToolStripMenuItem.Text = "$pc";
             this.pcToolStripMenuItem.Click += new System.EventHandler(this.pcToolStripMenuItem_Click);
             // 
             // spToolStripMenuItem
             // 
             this.spToolStripMenuItem.Name = "spToolStripMenuItem";
-            this.spToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.spToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.spToolStripMenuItem.Text = "$sp";
             this.spToolStripMenuItem.Click += new System.EventHandler(this.spToolStripMenuItem_Click);
             // 
             // raToolStripMenuItem
             // 
             this.raToolStripMenuItem.Name = "raToolStripMenuItem";
-            this.raToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.raToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.raToolStripMenuItem.Text = "$ra";
             this.raToolStripMenuItem.Click += new System.EventHandler(this.raToolStripMenuItem_Click);
             // 
             // evecToolStripMenuItem
             // 
             this.evecToolStripMenuItem.Name = "evecToolStripMenuItem";
-            this.evecToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.evecToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.evecToolStripMenuItem.Text = "$evec";
             this.evecToolStripMenuItem.Click += new System.EventHandler(this.evecToolStripMenuItem_Click);
             // 
             // earToolStripMenuItem
             // 
             this.earToolStripMenuItem.Name = "earToolStripMenuItem";
-            this.earToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.earToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.earToolStripMenuItem.Text = "$ear";
             this.earToolStripMenuItem.Click += new System.EventHandler(this.earToolStripMenuItem_Click);
+            // 
+            // rbaseToolStripMenuItem
+            // 
+            this.rbaseToolStripMenuItem.Name = "rbaseToolStripMenuItem";
+            this.rbaseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rbaseToolStripMenuItem.Text = "$rbase";
+            this.rbaseToolStripMenuItem.Click += new System.EventHandler(this.rbaseToolStripMenuItem_Click);
+            // 
+            // ptableToolStripMenuItem
+            // 
+            this.ptableToolStripMenuItem.Name = "ptableToolStripMenuItem";
+            this.ptableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ptableToolStripMenuItem.Text = "$ptable";
+            this.ptableToolStripMenuItem.Click += new System.EventHandler(this.ptableToolStripMenuItem_Click);
             // 
             // MemoryForm
             // 
@@ -179,5 +197,7 @@
         private System.Windows.Forms.ToolStripMenuItem raToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem evecToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem earToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rbaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ptableToolStripMenuItem;
     }
 }

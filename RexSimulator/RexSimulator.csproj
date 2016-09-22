@@ -50,6 +50,7 @@
     <Compile Include="Hardware\SimpleWrampCpu.cs" />
     <Compile Include="Hardware\Wramp\ALU.cs" />
     <Compile Include="Hardware\Wramp\IR.cs" />
+    <Compile Include="Hardware\Wramp\MPU.cs" />
     <Compile Include="Hardware\Wramp\RegisterFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

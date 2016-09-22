@@ -10,6 +10,7 @@ using RexSimulator.Hardware;
 using System.IO;
 using RexSimulatorGui.Properties;
 using System.Threading;
+using RexSimulator.Hardware.Wramp;
 
 namespace RexSimulatorGui.Forms
 {
@@ -117,7 +118,15 @@ namespace RexSimulatorGui.Forms
 
             while (true)
             {
-                if (mRunning && mRamForm.Breakpoints.Contains(mRexBoard.CPU.PC)) //stop the CPU if a breakpoint has been hit
+                uint physPC = mRexBoard.CPU.PC;
+
+                //Convert to physical address
+                if ((mRexBoard.CPU.mSpRegisters[RegisterFile.SpRegister.cctrl] & 0x8) == 0)
+                {
+                    physPC += mRexBoard.CPU.mSpRegisters[RegisterFile.SpRegister.rbase];
+                }
+
+                if (mRunning && mRamForm.Breakpoints.Contains(physPC)) //stop the CPU if a breakpoint has been hit
                 {
                     this.Invoke(new Action(runButton.PerformClick));
                     continue;
@@ -139,14 +148,6 @@ namespace RexSimulatorGui.Forms
                             stepsPerSleep -= diff / 10000;
                             stepsPerSleep = Math.Min(Math.Max(0, stepsPerSleep), 1000000);
                         }
-
-                        /*for (long i = 0; i < mSlowdownCount / 1000000000; i++) ; //dirty cpu cycle-wasting loop                        
-
-                        long diff = (long)mLastClockRate - TARGET_CLOCK_RATE;
-
-                        mSlowdownCount += diff;
-
-                        Thread.Sleep(0); //swap thread out to allow other processes to run.*/
                     }
                 }
             }
@@ -259,6 +260,13 @@ namespace RexSimulatorGui.Forms
             mLastClockRateSmoothed = mLastClockRateSmoothed * (1.0 - rate) + mLastClockRate * rate;
 
             this.Text = string.Format("REX Board Simulator: Clock Rate: {0:0.000} MHz ({1:000}%)", mLastClockRateSmoothed / 1e6, mLastClockRateSmoothed * 100 / TARGET_CLOCK_RATE);
+
+            //Set status message if virtual memory is enabled
+            if ((mRexBoard.CPU.mSpRegisters[RegisterFile.SpRegister.cctrl] & 0x8) == 0)
+            {
+                statusStrip1.BackColor = Color.Red;
+                toolStripStatusLabel1.Text = "WARNING: User Mode Enabled (Alpha Feature)";
+            }
             rexWidget1.Invalidate();
         }
 

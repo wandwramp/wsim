@@ -23,6 +23,7 @@ namespace RexSimulator.Hardware
         private uint mPC;
         private IR mIR;
         private uint mInterruptStatus = 0;
+        private MPU mMPU;
         #endregion
 
         #region Accessors
@@ -32,7 +33,7 @@ namespace RexSimulator.Hardware
         public uint PC
         {
             get { return mPC; }
-            set { mPC = value; }
+            set { mPC = value & 0xFFFFF; }
         }
 
         /// <summary>
@@ -42,6 +43,14 @@ namespace RexSimulator.Hardware
         {
             get { return mInterruptStatus; }
             set { mInterruptStatus = value; }
+        }
+
+        /// <summary>
+        /// The instruction register of the CPU.
+        /// </summary>
+        public IR IR
+        {
+            get { return mIR; }
         }
         #endregion
 
@@ -73,6 +82,8 @@ namespace RexSimulator.Hardware
             mAlu = new ALU();
 
             mIR = new IR();
+
+            mMPU = new MPU(mSpRegisters, mAddressBus, mDataBus);
 
             Reset();
         }
@@ -164,40 +175,40 @@ namespace RexSimulator.Hardware
                         break;
 
                     case IR.Opcode.j:
-                        mPC = mIR.Immed20;
+                        PC = mIR.Immed20;
                         break;
 
                     case IR.Opcode.jr:
-                        mPC = mGpRegisters[(RegisterFile.GpRegister)mIR.Rs];
+                        PC = mGpRegisters[(RegisterFile.GpRegister)mIR.Rs];
                         break;
 
                     case IR.Opcode.jal:
-                        mGpRegisters[RegisterFile.GpRegister.ra] = mPC;
+                        mGpRegisters[RegisterFile.GpRegister.ra] = PC;
                         goto case IR.Opcode.j; //OK, I used a goto. Shoot me.
 
                     case IR.Opcode.jalr:
-                        mGpRegisters[RegisterFile.GpRegister.ra] = mPC;
+                        mGpRegisters[RegisterFile.GpRegister.ra] = PC;
                         goto case IR.Opcode.jr; //OK, I used a goto. Shoot me.
 
                     case IR.Opcode.lw:
-                        mAddressBus.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.SignedImmed20) & 0xfffff);
+                        mMPU.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.SignedImmed20) & 0xfffff);
                         mGpRegisters[(RegisterFile.GpRegister)mIR.Rd] = mDataBus.Value;
                         break;
 
                     case IR.Opcode.sw:
+                        mMPU.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.SignedImmed20) & 0xfffff);
                         mAddressBus.IsWrite = true;
-                        mAddressBus.Write((uint)(mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] + mIR.SignedImmed20) & 0xfffff);
                         mDataBus.Write(mGpRegisters[(RegisterFile.GpRegister)mIR.Rd]);
                         break;
 
                     case IR.Opcode.beqz:
                         if (mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] == 0)
-                            mPC = (uint)(mPC + mIR.SignedImmed20);
+                            PC = (uint)(PC + mIR.SignedImmed20);
                         break;
 
                     case IR.Opcode.bnez:
                         if (mGpRegisters[(RegisterFile.GpRegister)mIR.Rs] != 0)
-                            mPC = (uint)(mPC + mIR.SignedImmed20);
+                            PC = (uint)(PC + mIR.SignedImmed20);
                         break;
 
                     case IR.Opcode.la:
@@ -256,11 +267,11 @@ namespace RexSimulator.Hardware
                     mSpRegisters[RegisterFile.SpRegister.cctrl] = cctrlt | ieku;
 
                     //back up necessary registers
-                    mSpRegisters[RegisterFile.SpRegister.ear] = mPC;
+                    mSpRegisters[RegisterFile.SpRegister.ear] = PC;
                     mSpRegisters[RegisterFile.SpRegister.ers] = mGpRegisters[RegisterFile.GpRegister.r13];
 
                     //Jump to interrupt handler
-                    mPC = mSpRegisters[RegisterFile.SpRegister.evec];
+                    PC = mSpRegisters[RegisterFile.SpRegister.evec];
 
                     //Copy status
                     mSpRegisters[RegisterFile.SpRegister.estat] = mInterruptStatus & mask;
@@ -275,10 +286,10 @@ namespace RexSimulator.Hardware
         private void ProcessRfe()
         {
             uint oieku = (mSpRegisters[RegisterFile.SpRegister.cctrl] & 0x5) << 1;
-            uint cctrlt = (mSpRegisters[RegisterFile.SpRegister.cctrl] & 0xFFFFFFFA) | oieku;
+            uint cctrlt = (mSpRegisters[RegisterFile.SpRegister.cctrl] & 0xFFFFFFF0) | oieku;
             mSpRegisters[RegisterFile.SpRegister.cctrl] = cctrlt;
             mGpRegisters[RegisterFile.GpRegister.r13] = mSpRegisters[RegisterFile.SpRegister.ers];
-            mPC = mSpRegisters[RegisterFile.SpRegister.ear];
+            PC = mSpRegisters[RegisterFile.SpRegister.ear];
         }
         #endregion
 
@@ -296,7 +307,7 @@ namespace RexSimulator.Hardware
 
             //mIR.Reset();
             //mPC = 1; //Run user program (assumes the start address is 1; not always the case!)
-            mPC = 0x00080000; //Run monitor
+            PC = 0x00080000; //Run monitor
 
             mInterruptStatus = 0;
         }
@@ -317,7 +328,7 @@ namespace RexSimulator.Hardware
                 ProcessExceptions();
 
                 //Fetch next instruction & increment $PC
-                mAddressBus.Write(mPC++);
+                mMPU.Write(PC++);
                 mIR.Instruction = mDataBus.Value;
 
                 mTicksToNextInstruction = mIR.TicksRequired;

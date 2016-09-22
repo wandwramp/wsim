@@ -42,18 +42,20 @@
             this.serialForm1Checkbox = new System.Windows.Forms.CheckBox();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbFullSpeed = new System.Windows.Forms.CheckBox();
             this.stepButton = new System.Windows.Forms.Button();
             this.runButton = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.rexWidget1 = new RexSimulatorGui.Controls.RexWidget();
-            this.cbFullSpeed = new System.Windows.Forms.CheckBox();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.interruptButtonCheckbox);
             this.groupBox1.Controls.Add(this.timerConfigCheckbox);
             this.groupBox1.Controls.Add(this.parallelConfigCheckbox);
@@ -189,15 +191,27 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.cbFullSpeed);
             this.groupBox2.Controls.Add(this.stepButton);
             this.groupBox2.Controls.Add(this.runButton);
-            this.groupBox2.Location = new System.Drawing.Point(685, 613);
+            this.groupBox2.Location = new System.Drawing.Point(685, 607);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(108, 106);
+            this.groupBox2.Size = new System.Drawing.Size(108, 112);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Control";
+            // 
+            // cbFullSpeed
+            // 
+            this.cbFullSpeed.AutoSize = true;
+            this.cbFullSpeed.Location = new System.Drawing.Point(7, 78);
+            this.cbFullSpeed.Name = "cbFullSpeed";
+            this.cbFullSpeed.Size = new System.Drawing.Size(76, 17);
+            this.cbFullSpeed.TabIndex = 11;
+            this.cbFullSpeed.Text = "Full Speed";
+            this.cbFullSpeed.UseVisualStyleBackColor = true;
+            this.cbFullSpeed.CheckedChanged += new System.EventHandler(this.cbFullSpeed_CheckedChanged);
             // 
             // stepButton
             // 
@@ -222,6 +236,16 @@
             this.runButton.UseVisualStyleBackColor = false;
             this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 731);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(801, 22);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
             // rexWidget1
             // 
             this.rexWidget1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -233,22 +257,18 @@
             this.rexWidget1.Size = new System.Drawing.Size(800, 600);
             this.rexWidget1.TabIndex = 0;
             // 
-            // cbFullSpeed
+            // toolStripStatusLabel1
             // 
-            this.cbFullSpeed.AutoSize = true;
-            this.cbFullSpeed.Location = new System.Drawing.Point(7, 78);
-            this.cbFullSpeed.Name = "cbFullSpeed";
-            this.cbFullSpeed.Size = new System.Drawing.Size(76, 17);
-            this.cbFullSpeed.TabIndex = 11;
-            this.cbFullSpeed.Text = "Full Speed";
-            this.cbFullSpeed.UseVisualStyleBackColor = true;
-            this.cbFullSpeed.CheckedChanged += new System.EventHandler(this.cbFullSpeed_CheckedChanged);
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(79, 17);
+            this.toolStripStatusLabel1.Text = "Rex Simulator";
             // 
             // RexBoardForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(801, 731);
+            this.ClientSize = new System.Drawing.Size(801, 753);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.rexWidget1);
@@ -262,7 +282,10 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -285,6 +308,8 @@
         private System.Windows.Forms.Button stepButton;
         private System.Windows.Forms.Button runButton;
         private System.Windows.Forms.CheckBox cbFullSpeed;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 
 
     }

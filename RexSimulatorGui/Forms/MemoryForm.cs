@@ -21,7 +21,7 @@ namespace RexSimulatorGui.Forms
         private MemoryDevice mDevice;
         private IR mIr;
         private SimpleWrampCpu mCpu;
-        private uint mPc, mSp, mRa, mEvec, mEar;
+        private uint mPc, mSp, mRa, mEvec, mEar, mRbase, mPtable;
         private uint[] mShadow;
 
         private ListViewItem[] mVirtualItems;
@@ -93,6 +93,25 @@ namespace RexSimulatorGui.Forms
                 MessageBox.Show(addrName + " does not currently point into this address space", "Invalid Pointer");
             }
         }
+
+        /// <summary>
+        /// Sets the text in the "pointer" column of the table.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="text"></param>
+        /// <param name="append"></param>
+        private void SetPointerText(uint address, string text, bool append)
+        {
+            address -= mDevice.BaseAddress;
+
+            if (0 <= address && address < mDevice.Size)
+            {
+                if (!append)
+                    mVirtualItems[(int)address].SubItems[0].Text = "";
+
+                mVirtualItems[(int)address].SubItems[0].Text += text;
+            }
+        }
         #endregion
 
         #region Event Handlers
@@ -148,46 +167,43 @@ namespace RexSimulatorGui.Forms
             if (mCpu != null)
             {
                 //Get new address offsets
-                uint newPc = mCpu.PC - mDevice.BaseAddress;
-                uint newSp = mCpu.mGpRegisters[RegisterFile.GpRegister.sp] - mDevice.BaseAddress;
-                uint newRa = mCpu.mGpRegisters[RegisterFile.GpRegister.ra] - mDevice.BaseAddress;
-                uint newEvec = mCpu.mSpRegisters[RegisterFile.SpRegister.evec] - mDevice.BaseAddress;
-                uint newEar = mCpu.mSpRegisters[RegisterFile.SpRegister.ear] - mDevice.BaseAddress;
+                uint newPc = mCpu.PC;
+                uint newSp = mCpu.mGpRegisters[RegisterFile.GpRegister.sp];
+                uint newRa = mCpu.mGpRegisters[RegisterFile.GpRegister.ra];
+                uint newEvec = mCpu.mSpRegisters[RegisterFile.SpRegister.evec];
+                uint newEar = mCpu.mSpRegisters[RegisterFile.SpRegister.ear];
+                uint newRbase = mCpu.mSpRegisters[RegisterFile.SpRegister.rbase];
+                uint newPtable = mCpu.mSpRegisters[RegisterFile.SpRegister.ptable];
+
+                //Offset program counter by virtual address if enabled
+                if ((mCpu.mSpRegisters[RegisterFile.SpRegister.cctrl] & 0x8) == 0)
+                {
+                    newPc += newRbase;
+                    newSp += newRbase;
+                    newRa += newRbase;
+                    newEar += newRbase;
+                }
 
                 //Clear old locations
-                if (0 <= mPc && mPc < mDevice.Size)
-                    mVirtualItems[(int)mPc].SubItems[0].Text = "";
-
-                if (0 <= mSp && mSp < mDevice.Size)
-                    mVirtualItems[(int)mSp].SubItems[0].Text = "";
-
-                if (0 <= mRa && mRa < mDevice.Size)
-                    mVirtualItems[(int)mRa].SubItems[0].Text = "";
-
-                if (0 <= mEvec && mEvec < mDevice.Size)
-                    mVirtualItems[(int)mEvec].SubItems[0].Text = "";
-
-                if (0 <= mEar && mEar < mDevice.Size)
-                    mVirtualItems[(int)mEar].SubItems[0].Text = "";
+                SetPointerText(mPc, "", false);
+                SetPointerText(mSp, "", false);
+                SetPointerText(mRa, "", false);
+                SetPointerText(mEvec, "", false);
+                SetPointerText(mEar, "", false);
+                SetPointerText(mRbase, "", false);
+                SetPointerText(mPtable, "", false);
 
                 //Set new locations
-                if (0 <= newPc && newPc < mDevice.Size)
-                    mVirtualItems[(int)newPc].SubItems[0].Text += "$pc ";
-
-                if (0 <= newSp && newSp < mDevice.Size)
-                    mVirtualItems[(int)newSp].SubItems[0].Text += "$sp ";
-
-                if (0 <= newRa && newRa < mDevice.Size)
-                    mVirtualItems[(int)newRa].SubItems[0].Text += "$ra ";
-
-                if (0 <= newEvec && newEvec < mDevice.Size)
-                    mVirtualItems[(int)newEvec].SubItems[0].Text += "$evec ";
-
-                if (0 <= newEar && newEar < mDevice.Size)
-                    mVirtualItems[(int)newEar].SubItems[0].Text += "$ear ";
+                SetPointerText(newPc, "$pc ", true);
+                SetPointerText(newSp, "$sp ", true);
+                SetPointerText(newRa, "$ra ", true);
+                SetPointerText(newEvec, "$evec ", true);
+                SetPointerText(newEar, "$ear ", true);
+                SetPointerText(newRbase, "$rbase ", true);
+                SetPointerText(newPtable, "$ptable ", true);
 
                 //Redraw any affected items
-                RedrawItem(mPc, mSp, mRa, mEvec, mEar, newPc, newSp, newSp, newRa, newEvec, newEvec);
+                RedrawItem(mPc, mSp, mRa, mEvec, mEar, mRbase, mPtable, newPc, newSp, newSp, newRa, newEvec, newEvec, newRbase, newPtable);
 
                 mPc = newPc;
                 mSp = newSp;
@@ -195,6 +211,9 @@ namespace RexSimulatorGui.Forms
 
                 mEvec = newEvec;
                 mEar = newEar;
+
+                mRbase = newRbase;
+                mPtable = newPtable;
             }
             //listView1.EndUpdate();
         }
@@ -229,6 +248,16 @@ namespace RexSimulatorGui.Forms
             GotoAddress(mEar, "$ear");
         }
 
+        private void rbaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GotoAddress(mRbase, "$rbase");
+        }
+
+        private void ptableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GotoAddress(mPtable, "$ptable");
+        }
+
         /// <summary>
         /// Sets or removes a breakpoint.
         /// </summary>
@@ -239,6 +268,7 @@ namespace RexSimulatorGui.Forms
             if (memoryListView.SelectedIndices.Count == 1)
             {
                 uint addr = (uint)memoryListView.SelectedIndices[0];
+
                 if (mBreakpoints.Contains(addr))
                 {
                     mBreakpoints.Remove(addr);
@@ -275,6 +305,5 @@ namespace RexSimulatorGui.Forms
             menuStrip1.Show();
         }
         #endregion
-
     }
 }
