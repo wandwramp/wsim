@@ -43,7 +43,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -52,37 +51,37 @@
     <Compile Include="Controls\RexWidget.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\RexWidget.designer.cs">
+    <Compile Include="Controls\RexWidget.Designer.cs">
       <DependentUpon>RexWidget.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BasicSerialPortForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BasicSerialPortForm.designer.cs">
+    <Compile Include="Forms\BasicSerialPortForm.Designer.cs">
       <DependentUpon>BasicSerialPortForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MemoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MemoryForm.designer.cs">
+    <Compile Include="Forms\MemoryForm.Designer.cs">
       <DependentUpon>MemoryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PeripheralMemoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\PeripheralMemoryForm.designer.cs">
+    <Compile Include="Forms\PeripheralMemoryForm.Designer.cs">
       <DependentUpon>PeripheralMemoryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\RegisterForm.designer.cs">
+    <Compile Include="Forms\RegisterForm.Designer.cs">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\RexBoardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\RexBoardForm.designer.cs">
+    <Compile Include="Forms\RexBoardForm.Designer.cs">
       <DependentUpon>RexBoardForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />

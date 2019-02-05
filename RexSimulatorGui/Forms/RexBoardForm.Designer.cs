@@ -66,7 +66,7 @@
             this.groupBox1.Controls.Add(this.gprCheckbox);
             this.groupBox1.Controls.Add(this.serialForm2Checkbox);
             this.groupBox1.Controls.Add(this.serialForm1Checkbox);
-            this.groupBox1.Location = new System.Drawing.Point(13, 607);
+            this.groupBox1.Location = new System.Drawing.Point(13, 585);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(666, 112);
             this.groupBox1.TabIndex = 1;
@@ -195,7 +195,7 @@
             this.groupBox2.Controls.Add(this.cbFullSpeed);
             this.groupBox2.Controls.Add(this.stepButton);
             this.groupBox2.Controls.Add(this.runButton);
-            this.groupBox2.Location = new System.Drawing.Point(685, 607);
+            this.groupBox2.Location = new System.Drawing.Point(685, 585);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(108, 112);
             this.groupBox2.TabIndex = 2;
@@ -248,13 +248,15 @@
             // 
             // rexWidget1
             // 
-            this.rexWidget1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rexWidget1.Anchor = ((System.Windows.Forms.AnchorStyles)
+                    (System.Windows.Forms.AnchorStyles.Top |
+                     System.Windows.Forms.AnchorStyles.Bottom |
+                     System.Windows.Forms.AnchorStyles.Left |
+                     System.Windows.Forms.AnchorStyles.Right));
             this.rexWidget1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.rexWidget1.Location = new System.Drawing.Point(0, 0);
             this.rexWidget1.Name = "rexWidget1";
-            this.rexWidget1.Size = new System.Drawing.Size(800, 600);
+            this.rexWidget1.Size = new System.Drawing.Size(928, 572);
             this.rexWidget1.TabIndex = 0;
             // 
             // toolStripStatusLabel1
@@ -267,7 +269,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(801, 753);
+            this.ClientSize = new System.Drawing.Size(795, 728);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);

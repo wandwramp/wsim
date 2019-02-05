@@ -84,8 +84,6 @@ namespace RexSimulator.Hardware
             mIR = new IR();
 
             mMPU = new MPU(mSpRegisters, mAddressBus, mDataBus);
-
-            Reset();
         }
         #endregion
 
@@ -146,10 +144,6 @@ namespace RexSimulator.Hardware
                                 {
                                     case IR.Function.movgs:
                                         mSpRegisters[(RegisterFile.SpRegister)mIR.Rd] = mGpRegisters[(RegisterFile.GpRegister)mIR.Rs];
-
-                                        //For some reason, the hardware fires off a GPF when explicitly setting the KU bit to zero.
-                                        if ((mSpRegisters[RegisterFile.SpRegister.cctrl] & 0x00000008) == 0)
-                                            mInterruptStatus |= (uint)ExceptionSource.GPF;
                                         break;
 
                                     case IR.Function.movsg:
@@ -229,6 +223,12 @@ namespace RexSimulator.Hardware
             {
                 mInterruptStatus |= (uint)ExceptionSource.ARITH;
             }
+            catch (AccessViolationException)
+            {
+                // Thrown by lw or sw if we are in user mode and code attempts to
+                // access memory restricted by $ptable.
+                mInterruptStatus |= (uint)ExceptionSource.GPF;
+            }
         }
 
         /// <summary>
@@ -305,8 +305,7 @@ namespace RexSimulator.Hardware
 
             mSpRegisters[RegisterFile.SpRegister.cctrl] = 0x00000008;
 
-            //mIR.Reset();
-            //mPC = 1; //Run user program (assumes the start address is 1; not always the case!)
+            //PC = 0; //Run user program, assuming its entrypoint is the default of 0.
             PC = 0x00080000; //Run monitor
 
             mInterruptStatus = 0;
@@ -328,7 +327,19 @@ namespace RexSimulator.Hardware
                 ProcessExceptions();
 
                 //Fetch next instruction & increment $PC
-                mMPU.Write(PC++);
+                try
+                {
+                    mMPU.Write(PC++);
+                }
+                catch (AccessViolationException)
+                {
+                    // If we are in user mode and an instruction within protected memory
+                    // is fetched, we should immediately throw a GPF.
+                    // This takes us out of user mode, so mMPU.Write(PC); will not throw another exception.
+                    mInterruptStatus |= (uint)ExceptionSource.GPF;
+                    ProcessExceptions();
+                    mMPU.Write(PC);
+                }
                 mIR.Instruction = mDataBus.Value;
 
                 mTicksToNextInstruction = mIR.TicksRequired;

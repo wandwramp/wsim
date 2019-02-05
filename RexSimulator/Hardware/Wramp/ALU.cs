@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,6 +46,12 @@ namespace RexSimulator.Hardware.Wramp
         private int mRts { get { return (int)mRt; } }
         #endregion
 
+		// Unchecked conversion from int to uint (convenient in checked contexts).
+		private uint ToUint(int value)
+		{
+			return (uint)value;
+		}
+
         #region Outputs
         /// <summary>
         /// The current result.
@@ -54,45 +60,48 @@ namespace RexSimulator.Hardware.Wramp
         {
             get
             {
-                switch (mFunc)
-                {
-                    //Arithmethc
-                    case IR.Function.add: return (uint)(mRss + mRts);
-                    case IR.Function.addu: return mRs + mRt;
-                    case IR.Function.sub: return (uint)(mRss - mRts);
-                    case IR.Function.subu: return mRs - mRt;
-                    case IR.Function.mult: return (uint)(mRss * mRts);
-                    case IR.Function.multu: return mRs * mRt;
-                    case IR.Function.div: return (uint)(mRss / mRts);
-                    case IR.Function.divu: return mRs / mRt;
-                    case IR.Function.rem: return (uint)(mRss % mRts);
-                    case IR.Function.remu: return mRs % mRt;
-                    case IR.Function.sll: return mRs << mRts;
-                    case IR.Function.and: return mRs & mRt;
-                    case IR.Function.srl: return mRs >> mRts;
-                    case IR.Function.or: return mRs | mRt;
-                    case IR.Function.sra: return (uint)(mRss >> mRts);
-                    case IR.Function.xor: return mRs ^ mRt;
+				checked
+				{
+					switch (mFunc)
+					{
+						//Arithmetic
+						case IR.Function.add: return ToUint(mRss + mRts);
+						case IR.Function.addu: return mRs + mRt;
+						case IR.Function.sub: return ToUint(mRss - mRts);
+						case IR.Function.subu: return mRs - mRt;
+						case IR.Function.mult: return ToUint(mRss * mRts);
+						case IR.Function.multu: return mRs * mRt;
+						case IR.Function.div: return ToUint(mRss / mRts);
+						case IR.Function.divu: return mRs / mRt;
+						case IR.Function.rem: return ToUint(mRss % mRts);
+						case IR.Function.remu: return mRs % mRt;
+						case IR.Function.sll: return mRs << mRts;
+						case IR.Function.and: return mRs & mRt;
+						case IR.Function.srl: return mRs >> mRts;
+						case IR.Function.or: return mRs | mRt;
+						case IR.Function.sra: return ToUint(mRss >> mRts);
+						case IR.Function.xor: return mRs ^ mRt;
 
-                    //Test
-                    case IR.Function.slt: return (mRss < mRts) ? 1u : 0u;
-                    case IR.Function.sltu: return (mRs < mRt) ? 1u : 0u;
-                    case IR.Function.sgt: return (mRss > mRts) ? 1u : 0u;
-                    case IR.Function.sgtu: return (mRs > mRt) ? 1u : 0u;
-                    case IR.Function.sle: return (mRss <= mRts) ? 1u : 0u;
-                    case IR.Function.sleu: return (mRs <= mRt) ? 1u : 0u;
-                    case IR.Function.sge: return (mRss >= mRts) ? 1u : 0u;
-                    case IR.Function.sgeu: return (mRs >= mRt) ? 1u : 0u;
-                    case IR.Function.seq: return (mRss == mRts) ? 1u : 0u;
-                    case IR.Function.sequ: return (mRs == mRt) ? 1u : 0u;
-                    case IR.Function.sne: return (mRss != mRts) ? 1u : 0u;
-                    case IR.Function.sneu: return (mRs != mRt) ? 1u : 0u;
+						//Test
+						case IR.Function.slt: return (mRss < mRts) ? 1u : 0u;
+						case IR.Function.sltu: return (mRs < mRt) ? 1u : 0u;
+						case IR.Function.sgt: return (mRss > mRts) ? 1u : 0u;
+						case IR.Function.sgtu: return (mRs > mRt) ? 1u : 0u;
+						case IR.Function.sle: return (mRss <= mRts) ? 1u : 0u;
+						case IR.Function.sleu: return (mRs <= mRt) ? 1u : 0u;
+						case IR.Function.sge: return (mRss >= mRts) ? 1u : 0u;
+						case IR.Function.sgeu: return (mRs >= mRt) ? 1u : 0u;
+						case IR.Function.seq: return (mRss == mRts) ? 1u : 0u;
+						case IR.Function.sequ: return (mRs == mRt) ? 1u : 0u;
+						case IR.Function.sne: return (mRss != mRts) ? 1u : 0u;
+						case IR.Function.sneu: return (mRs != mRt) ? 1u : 0u;
 
-                    //Misc
-                    case IR.Function.lhi: return mRt << 16;
-                    case IR.Function.inc: return mRs + 1;
-                    default: throw new InvalidOperationException("Unknown Function!");
-                }
+						//Misc
+						case IR.Function.lhi: return mRt << 16;
+						case IR.Function.inc: return mRs + 1;   // Note: This function no longer exists
+						default: throw new InvalidOperationException("Unknown Function!");
+					}
+				}
             }
         }
         #endregion

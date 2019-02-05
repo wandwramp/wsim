@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -23,22 +24,72 @@ namespace RexSimulatorGui.Controls
         /// <summary>
         /// The control that currently has mouse focus.
         /// </summary>
-        private enum ControlWithFocus { None, Reset, Interrupt, Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7, Button0, Button1, ButtonBoth, Duck };
+        [Flags]
+        private enum ControlWithFocus { 
+            None = 0, Reset = 1, SoftReset = 1 << 1, Interrupt = 1 << 2, Duck = 1 << 3,
+            
+            Switch0 = 1 << 4, Switch1 = 1 << 5, Switch2 = 1 << 6, Switch3 = 1 << 7,
+            Switch4 = 1 << 8, Switch5 = 1 << 9, Switch6 = 1 << 10, Switch7 = 1 << 11,
+            Switch8 = 1 << 12, Switch9 = 1 << 13, Switch10 = 1 << 14, Switch11 = 1 << 15,
+            Switch12 = 1 << 16, Switch13 = 1 << 17, Switch14 = 1 << 18, Switch15 = 1 << 19,
+            
+            ButtonR = 1 << 20, ButtonC = 1 << 21, ButtonL = 1 << 22
+            };
         #endregion
 
         #region Members
         public readonly RexBoard mBoard;
 
         private int mButtonRad = 13;
-        private Size mSwitchBorderSize = new Size(15, 40);
-        private Size mSwitchSize = new Size(10, 10);
+        private Size mSwitchBorderSize = new Size(20, 60);
+        private Size mSwitchSize = new Size(13, 13);
         private int mDuckRad = 40;
 
-        private Point mResetLoc = new Point(74, 509);
-        private Point mInterruptLoc = new Point(165, 512);
-        private Point[] mButtonLoc = new Point[] { new Point(740, 547), new Point(707, 548) };
-        private Point[] mSwitchLoc = new Point[] { new Point(727, 489), new Point(695, 489), new Point(665, 489), new Point(633, 489), new Point(603, 489), new Point(572, 489), new Point(540, 489), new Point(510, 489) };
-        private Point mDuckLoc = new Point(351, 209);
+        private Point mResetLoc = new Point(787, 63);
+        private Point mSoftResetLoc = new Point (671, 252);
+        private Point mInterruptLoc = new Point(671, 345);
+        private Point[] mButtonLoc = new Point[] { 
+            new Point(726, 299),	//right
+            new Point(671, 299), 	//center
+            new Point(614, 299),	//left
+        };
+        private Point[] mSwitchLoc = new Point[] { 
+            new Point(815, 443),    //0
+            new Point(768, 443),
+            new Point(723, 443),
+            new Point(680, 443),
+            new Point(637, 443),
+            new Point(590, 443),
+            new Point(543, 443),
+            new Point(498, 443),
+            new Point(450, 443),
+            new Point(405, 443),
+            new Point(360, 443),
+            new Point(313, 443),
+            new Point(266, 443),
+            new Point(221, 443),
+            new Point(177, 443),
+            new Point(132, 443)    //15
+        };
+        private Point[] mLedLoc = new Point[] {
+            new Point(788, 371),   //0
+            new Point(747, 371),
+            new Point(704, 371),
+            new Point(661, 371),
+            new Point(618, 371),
+            new Point(575, 371),
+            new Point(531, 371),
+            new Point(488, 371),
+            new Point(446, 371),
+            new Point(402, 371),
+            new Point(358, 371),
+            new Point(314, 371),
+            new Point(270, 371),
+            new Point(227, 371),
+            new Point(185, 371),
+            new Point(142, 371),   //15
+        };
+        private Point mDuckLoc = new Point(470,208);
 
         
         private ControlWithFocus mActiveControl = ControlWithFocus.None;
@@ -75,6 +126,9 @@ namespace RexSimulatorGui.Controls
             //Reset Button
             if (Distance(mouseLoc, mResetLoc) < mButtonRad)
                 return ControlWithFocus.Reset;
+            //Soft Reset Button
+            if (Distance(mouseLoc, mSoftResetLoc) < mButtonRad)
+                return ControlWithFocus.SoftReset;
 
             //User Interrupt Button
             if (Distance(mouseLoc, mInterruptLoc) < mButtonRad)
@@ -88,16 +142,39 @@ namespace RexSimulatorGui.Controls
             for (int i = 0; i < mButtonLoc.Length; i++)
             {
                 if (Distance(mouseLoc, mButtonLoc[i]) < mButtonRad)
-                    return ControlWithFocus.Button0 + i;
+                    return (ControlWithFocus)((int)(ControlWithFocus.ButtonR) << i);
             }
-            if (Distance(mouseLoc, mButtonLoc[0]) + Distance(mouseLoc, mButtonLoc[1]) < 3 * mButtonRad)
-                return ControlWithFocus.ButtonBoth;
+
+            // Sets of two buttons.
+            // This array contains information about overlaps between adjacent buttons.
+            // The first two elements are the indices of the buttons.
+            // The last element is an approximation of the distance between the buttons.
+            int[][] overlaps = {
+                new int[]{0, 1, 5}, // Right and middle
+                new int[]{1, 2, 5}, // Middle and left
+            };
+
+            foreach (int[] overlap in overlaps)
+            {
+                int i = overlap[0];
+                int j = overlap[1];
+                int multiplier = overlap[2];
+                
+                if (Distance(mouseLoc, mButtonLoc[i]) + Distance(mouseLoc, mButtonLoc[j]) < multiplier * mButtonRad)
+                {
+                    return (ControlWithFocus)(
+                        ((int)(ControlWithFocus.ButtonR) << i) |
+                        ((int)(ControlWithFocus.ButtonR) << j));
+                }
+            }
 
             //Switches
             for (int i = 0; i < mSwitchLoc.Length; i++)
             {
                 if (Distance(mouseLoc, mSwitchLoc[i]) < mButtonRad)
-                    return ControlWithFocus.Switch0 + i;
+                {
+                    return (ControlWithFocus)((int)(ControlWithFocus.Switch0) << i);
+                }
             }
 
             return ControlWithFocus.None;
@@ -150,8 +227,11 @@ namespace RexSimulatorGui.Controls
         /// <param name="g">The graphics to draw on.</param>
         private void DrawSSDs(Graphics g)
         {
-            DrawSSD(g, mBoard.Parallel.LeftSSDOut, 578, 320, 25, 30);
-            DrawSSD(g, mBoard.Parallel.RightSSDOut, 613, 320, 25, 30);
+            g.FillRectangle(Brushes.Black, 180, 290, 210, 65);
+            DrawSSD(g, mBoard.Parallel.LeftLeftSSDOut, 185, 290, 30, 45);
+            DrawSSD(g, mBoard.Parallel.LeftRightSSDOut, 240, 290, 30, 45);
+            DrawSSD(g, mBoard.Parallel.LeftSSDOut, 295, 290, 30, 45);
+            DrawSSD(g, mBoard.Parallel.RightSSDOut, 350, 290, 30, 45);
         }
 
         /// <summary>
@@ -160,10 +240,15 @@ namespace RexSimulatorGui.Controls
         /// <param name="g">The graphics to draw on.</param>
         private void DrawBusses(Graphics g)
         {
-            g.DrawString(string.Format("0x{0:X5}", mBoard.mAddressBus.Value), new Font(FontFamily.GenericMonospace, 15, FontStyle.Bold), Brushes.Red, 465, 240);
-            g.DrawString(string.Format("0x{0:X8}", mBoard.mDataBus.Value), new Font(FontFamily.GenericMonospace, 15, FontStyle.Bold), Brushes.Red, 465, 195);
-
-            g.DrawString(string.Format("0x{0:X5}", mBoard.CPU.PC), new Font(FontFamily.GenericMonospace, 15, FontStyle.Bold), Brushes.Red, 130, 241);
+            g.DrawString(
+                string.Format(
+                    "Address Bus: 0x{0:X5}    Data Bus: 0x{1:X8}    Program Counter: 0x{2:X5}",
+                    mBoard.mAddressBus.Value,
+                    mBoard.mDataBus.Value,
+                    mBoard.CPU.PC),
+                new Font(FontFamily.GenericMonospace, 12, FontStyle.Bold),
+                Brushes.Black,
+                5, 525);
         }
 
         /// <summary>
@@ -179,18 +264,40 @@ namespace RexSimulatorGui.Controls
             g.FillEllipse(b, x, y, 15, 15);
         }
 
+        private void DrawIRQ(Graphics g, string name, bool on, int x, int y)
+        {
+            g.DrawString(
+                name,
+                new Font(FontFamily.GenericMonospace,
+                    12,
+                    FontStyle.Bold),
+                on ? Brushes.Black : Brushes.Silver,
+                x, y);
+        }
+
         /// <summary>
         /// Draws IRQ lights on the board.
         /// </summary>
         /// <param name="g"></param>
         private void DrawIRQs(Graphics g)
         {
-            DrawLed(g, mBoard.mIrqs.GetBit(1), 225, 470); //Button
-            DrawLed(g, mBoard.mIrqs.GetBit(2), 443, 355); //Timer
-            DrawLed(g, mBoard.mIrqs.GetBit(3), 590, 295); //Parallel
-            DrawLed(g, mBoard.mIrqs.GetBit(4), 648, 27); //Serial 1
-            DrawLed(g, mBoard.mIrqs.GetBit(5), 648, 95); //Serial 2
+            // The width of the text is around 10px/character, so
+            // these magic numbers give approximately 40px of space
+            // between each label.
+            DrawIRQ(g, "Interrupts:", mBoard.mIrqs.Value != 0, 5, 550);
+            DrawIRQ(g, "Button", mBoard.mIrqs.GetBit(1), 150, 550);
+            DrawIRQ(g, "Timer", mBoard.mIrqs.GetBit(2), 250, 550);
+            DrawIRQ(g, "Parallel", mBoard.mIrqs.GetBit(3), 340, 550);
+            DrawIRQ(g, "Serial 1", mBoard.mIrqs.GetBit(4), 460, 550);
+            DrawIRQ(g, "Serial 2", mBoard.mIrqs.GetBit(5), 580, 550);
+        }
 
+        private void DrawLeds(Graphics g)
+        {
+            for (int i = 0; i < mLedLoc.Length; i++)
+            {
+                DrawLed(g, (mBoard.Parallel.Leds & (1 << i)) != 0, mLedLoc[i].X, mLedLoc[i].Y);
+            }
         }
 
         /// <summary>
@@ -208,25 +315,29 @@ namespace RexSimulatorGui.Controls
         }
 
         /// <summary>
-        /// Draws the reset, interrupt and parallel port buttons
+        /// Draws the buttons
         /// </summary>
         /// <param name="g"></param>
         private void DrawButtons(Graphics g)
         {
             //Reset
-            Brush b = (mActiveControl == ControlWithFocus.Reset) ? Brushes.Red : Brushes.DarkRed;
+            Brush b = (mActiveControl & ControlWithFocus.Reset) != 0 ? Brushes.Red : Brushes.DarkRed;
             DrawButton(g, mResetLoc, b);
 
+            // Soft reset
+            b = (mActiveControl & ControlWithFocus.SoftReset) != 0 ? Brushes.Red : Brushes.DarkRed;
+            DrawButton(g, mSoftResetLoc, b);
+
             //Interrupt
-            b = (mActiveControl == ControlWithFocus.Interrupt) ? Brushes.DarkGray : Brushes.Gray;
+            b = (mActiveControl & ControlWithFocus.Interrupt) != 0 ? Brushes.Green : Brushes.DarkGreen;
             DrawButton(g, mInterruptLoc, b);
 
             //Parallel Buttons
-            b = (mActiveControl == ControlWithFocus.Button0 || mActiveControl == ControlWithFocus.ButtonBoth) ? Brushes.DarkGray : Brushes.Gray;
-            DrawButton(g, mButtonLoc[0], b);
-
-            b = (mActiveControl == ControlWithFocus.Button1 || mActiveControl == ControlWithFocus.ButtonBoth) ? Brushes.DarkGray : Brushes.Gray;
-            DrawButton(g, mButtonLoc[1], b);
+            for (int i = 0; i < mButtonLoc.Length; i++)
+            {
+                b = (mActiveControl & (ControlWithFocus)((int)ControlWithFocus.ButtonR << i)) != 0 ? Brushes.DarkGray : Brushes.Gray;
+                DrawButton(g, mButtonLoc[i], b);
+            }
         }
 
         /// <summary>
@@ -256,7 +367,8 @@ namespace RexSimulatorGui.Controls
         {
             for (int i = 0; i < mSwitchLoc.Length; i++)
             {
-                Brush b = (mActiveControl == (ControlWithFocus)(ControlWithFocus.Switch0 + i)) ? Brushes.LightGray : Brushes.White;
+                ControlWithFocus controlToTest = (ControlWithFocus)((int)(ControlWithFocus.Switch0) << i);
+                Brush b = (mActiveControl == controlToTest)	? Brushes.LightGray : Brushes.White;
                 DrawSwitch(g, mSwitchLoc[i], b, i);
             }
         }
@@ -277,6 +389,7 @@ namespace RexSimulatorGui.Controls
                 DrawSSDs(g);
                 DrawBusses(g);
                 DrawIRQs(g);
+                DrawLeds(g);
                 DrawButtons(g);
                 DrawSwitches(g);
 
@@ -295,7 +408,8 @@ namespace RexSimulatorGui.Controls
 
         private void RexWidget_MouseMove(object sender, MouseEventArgs e)
         {
-            mActiveControl = GetActiveControl(e.Location);
+            if (e.Button == MouseButtons.None)
+                mActiveControl = GetActiveControl(e.Location);
         }
 
         private void RexWidget_Click(object sender, EventArgs e)
@@ -303,6 +417,7 @@ namespace RexSimulatorGui.Controls
             switch (mActiveControl)
             {
                 case ControlWithFocus.Reset:
+                case ControlWithFocus.SoftReset:
                     uint switchBk = mBoard.Parallel.Switches;
                     mBoard.Reset();
                     mBoard.Parallel.Switches = switchBk;
@@ -320,7 +435,7 @@ namespace RexSimulatorGui.Controls
 
             for (int i = 0; i < mSwitchLoc.Length; i++)
             {
-                if (mActiveControl == ControlWithFocus.Switch0 + i)
+                if (mActiveControl == (ControlWithFocus)((int)ControlWithFocus.Switch0 << i))
                 {
                     mBoard.Parallel.Switches ^= (1u << i);
                 }
@@ -334,20 +449,10 @@ namespace RexSimulatorGui.Controls
 
         private void RexWidget_MouseDown(object sender, MouseEventArgs e)
         {
-            switch (mActiveControl)
-            {
-                case ControlWithFocus.Button0:
-                    mBoard.Parallel.Buttons = 1;
-                    break;
-
-                case ControlWithFocus.Button1:
-                    mBoard.Parallel.Buttons = 2;
-                    break;
-
-                case ControlWithFocus.ButtonBoth:
-                    mBoard.Parallel.Buttons = 3;
-                    break;
-            }
+            mBoard.Parallel.Buttons = (uint)(mActiveControl &
+                   (ControlWithFocus.ButtonR |
+                    ControlWithFocus.ButtonC |
+                    ControlWithFocus.ButtonL)) >> 20;
         }
         #endregion
 
@@ -357,7 +462,7 @@ namespace RexSimulatorGui.Controls
         /// </summary>
         public void Step()
         {
-            while (!mBoard.Tick()) ;
+            while (!mBoard.Tick());
         }
 
         /// <summary>

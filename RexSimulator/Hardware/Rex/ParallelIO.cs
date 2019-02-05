@@ -9,7 +9,7 @@ namespace RexSimulator.Hardware.Rex
 {
     /// <summary>
     /// The Parallel IO device on the REX board.
-    /// Registers: { Switches, Buttons, Left SSD, Right SSD, Control, Interrupt ack }
+    /// Registers: { Switches, Buttons, Left SSD, Right SSD, Control, Interrupt ack, LeftLeft SSD, LeftRight SSD, (Right)Left SSD, (Right)Right SSD }
     /// </summary>
     public class ParallelIO : MemoryDevice
     {
@@ -29,7 +29,7 @@ namespace RexSimulator.Hardware.Rex
         /// </summary>
         public uint Switches
         {
-            get { return mMemory[0] & 0xff; }
+            get { return mMemory[0] & 0xffff; }
             set
             {
                 if (mMemory[0] != value && ((Control & 2) != 0))
@@ -43,7 +43,7 @@ namespace RexSimulator.Hardware.Rex
         /// </summary>
         public uint Buttons
         {
-            get { return mMemory[1] & 0x03; }
+            get { return mMemory[1] & 0x1f; }
             set
             {
                 if (mMemory[1] != value && ((Control & 2) != 0))
@@ -52,20 +52,30 @@ namespace RexSimulator.Hardware.Rex
             }
         }
 
-        /// <summary>
-        /// The state of the left SSD.
+		/// <summary>
+        /// The state of the left SSD in the left pair.
         /// </summary>
-        public uint LeftSSD { get { return mMemory[2] & 0xff; } set { mMemory[2] = value; } }
+		public uint LeftLeftSSD { get { return mMemory[6] & 0xff; } set { mMemory[6] = value; } }
+		
+		/// <summary>
+        /// The state of the right SSD in the left pair.
+        /// </summary>
+        public uint LeftRightSSD { get { return mMemory[7] & 0xff; } set { mMemory[7] = value; } }
 
         /// <summary>
-        /// The state of the right SSD.
+        /// The state of the left SSD in the right pair.
         /// </summary>
-        public uint RightSSD { get { return mMemory[3] & 0xff; } set { mMemory[3] = value; } }
+        public uint LeftSSD { get { return mMemory[8] & 0xff; } set { mMemory[2] = value; mMemory[8] = value; } }
 
         /// <summary>
-        /// Gets the state of both SSDs.
+        /// The state of the right SSD in the right pair.
         /// </summary>
-        public uint SSD { get { return ((LeftSSD & 0xf) << 4) | (RightSSD & 0xf); } }
+        public uint RightSSD { get { return mMemory[9] & 0xff; } set { mMemory[3] = value; mMemory[9] = value; } }
+
+        /// <summary>
+        /// Gets the state of all SSDs.
+        /// </summary>
+        public uint SSD { get { return ((LeftLeftSSD & 0xf) << 12) | ((LeftRightSSD & 0xf) << 8) | ((LeftSSD & 0xf) << 4) | (RightSSD & 0xf); } }
 
         /// <summary>
         /// The control register.
@@ -76,14 +86,29 @@ namespace RexSimulator.Hardware.Rex
         /// The interrupt acknowledge register.
         /// </summary>
         public uint InterruptAck { get { return mMemory[5]; } set { mMemory[5] = value; } }
+        
+        /// <summary>
+        /// The state of the LEDs.
+        /// </summary>
+        public uint Leds { get { return mMemory[10]; } set { mMemory[10] = value; } }
 
         /// <summary>
-        /// The raw left SSD output.
+        /// The raw left SSD output, for the left pair.
+        /// </summary>
+        public uint LeftLeftSSDOut { get { if ((Control & 1) != 0) return SSD_DECODE[LeftLeftSSD & 0xf]; return LeftLeftSSD; } }
+
+        /// <summary>
+        /// The raw left SSD output, for the left pair.
+        /// </summary>
+        public uint LeftRightSSDOut { get { if ((Control & 1) != 0) return SSD_DECODE[LeftRightSSD & 0xf]; return LeftRightSSD; } }
+
+        /// <summary>
+        /// The raw left SSD output, for the right pair.
         /// </summary>
         public uint LeftSSDOut { get { if ((Control & 1) != 0) return SSD_DECODE[LeftSSD & 0xf]; return LeftSSD; } }
 
         /// <summary>
-        /// The raw right SSD output.
+        /// The raw right SSD output, for the right pair.
         /// </summary>
         public uint RightSSDOut { get { if ((Control & 1) != 0) return SSD_DECODE[RightSSD & 0xf]; return RightSSD; } }
         #endregion
@@ -101,9 +126,12 @@ namespace RexSimulator.Hardware.Rex
         {
             Switches = 0;
             Buttons = 0;
+            LeftLeftSSD = 0;
+            LeftRightSSD = 0;
             LeftSSD = 0;
             RightSSD = 0;
             Control = 1;
+            Leds = 0;
             Interrupt(false);
         }
         public override void Write()
@@ -112,8 +140,19 @@ namespace RexSimulator.Hardware.Rex
                 return; //read-only switches and buttons
             base.Write();
 
+            // Right pair of SSDs are double-mapped, so we write twice.
             if (mAddressBus.Value == mBaseAddress + 2 || mAddressBus.Value == mBaseAddress + 3)
+            {
+                mAddressBus.Write(mAddressBus.Value + 6);
+                base.Write();
                 SSD_Changed = true;
+            }
+            if (mAddressBus.Value == mBaseAddress + 8 || mAddressBus.Value == mBaseAddress + 9)
+            {
+                mAddressBus.Write(mAddressBus.Value - 6);
+                base.Write();
+                SSD_Changed = true;
+            }
 
             if (mIrqBus != null)
                 mIrqBus.SetBit(mIrqNumber, mMemory[mIrqOffset] != 0);

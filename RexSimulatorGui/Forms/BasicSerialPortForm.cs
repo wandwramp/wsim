@@ -288,8 +288,8 @@ namespace RexSimulatorGui.Forms
                             int x = int.Parse(split[1]);
                             int y = int.Parse(split[0]);
 
-                            mCX = Math.Min(Math.Max(0, x), NUM_COLS);
-                            mCY = Math.Min(Math.Max(0, y), NUM_ROWS);
+                            mCX = Math.Min(Math.Max(0, x), NUM_COLS) - 1;
+                            mCY = Math.Min(Math.Max(0, y), NUM_ROWS) - 1;
                         }
                         catch { }
                         mEscapeSequence = null;

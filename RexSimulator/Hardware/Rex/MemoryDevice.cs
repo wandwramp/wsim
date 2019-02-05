@@ -60,7 +60,6 @@ namespace RexSimulator.Hardware.Rex
             mName = name;
 
             mAddressBus.Changed += new EventHandler<Bus.BusChangedEventArgs>(mAddressBus_Updated);
-            Reset();
         }
 
         /// <summary>

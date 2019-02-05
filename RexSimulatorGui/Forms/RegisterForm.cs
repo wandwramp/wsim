@@ -48,12 +48,12 @@ namespace RexSimulatorGui.Forms
                 string name;
                 if (mIsSpecial)
                 {
-                    v = mReg[(RegisterFile.SpRegister)i];
+                    v = mReg[sreg];
                     name = mSpRegNames[i];
                 }
                 else
                 {
-                    v = mReg[(RegisterFile.GpRegister)i];
+                    v = mReg[greg];
                     name = mGpRegNames[i];
                 }
 

@@ -23,12 +23,13 @@ namespace RexSimulatorGui.Forms
         /// <summary>
         /// The clock rate that the simulator should (try to) run at, if throttling is enabled.
         /// </summary>
-        private const long TARGET_CLOCK_RATE = 4000000;
+        private const long TARGET_CLOCK_RATE = 6250000;
         #endregion
 
         #region Member Variables
         private RexBoard mRexBoard;
         private Thread mWorker;
+        private static ManualResetEvent mWorkerEnabler;
 
         private BasicSerialPortForm mSerialForm1;
         private BasicSerialPortForm mSerialForm2;
@@ -67,7 +68,9 @@ namespace RexSimulatorGui.Forms
             wmon.Close();
 
             //Set up the worker thread
+            mWorkerEnabler = new ManualResetEvent(true); // CPU begins in a running state, since the reset is finished
             mWorker = new Thread(new ThreadStart(Worker));
+            mRexBoard.SetTickEnabler(mWorkerEnabler);
 
             //Set up all forms
             mSubforms = new List<Form>();
@@ -118,6 +121,9 @@ namespace RexSimulatorGui.Forms
 
             while (true)
             {
+                // Wait around if the CPU shouldn't be ticking at the moment, such as during a reset
+                mWorkerEnabler.WaitOne();
+
                 uint physPC = mRexBoard.CPU.PC;
 
                 //Convert to physical address
@@ -259,7 +265,7 @@ namespace RexSimulatorGui.Forms
             mLastClockRate = ticksSinceLastUpdate / timeSinceLastUpdate.TotalSeconds;
             mLastClockRateSmoothed = mLastClockRateSmoothed * (1.0 - rate) + mLastClockRate * rate;
 
-            this.Text = string.Format("REX Board Simulator: Clock Rate: {0:0.000} MHz ({1:000}%)", mLastClockRateSmoothed / 1e6, mLastClockRateSmoothed * 100 / TARGET_CLOCK_RATE);
+            this.Text = string.Format("Basys WRAMP Board Simulator: Clock Rate: {0:0.000} MHz ({1:000}%)", mLastClockRateSmoothed / 1e6, mLastClockRateSmoothed * 100 / TARGET_CLOCK_RATE);
 
             //Set status message if virtual memory is enabled
             if ((mRexBoard.CPU.mSpRegisters[RegisterFile.SpRegister.cctrl] & 0x8) == 0)

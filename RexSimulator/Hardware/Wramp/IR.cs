@@ -98,7 +98,9 @@ namespace RexSimulator.Hardware.Wramp
         }
 
         /// <summary>
-        /// Gets the number of ticks required to execute this instruction.
+        /// Gets the number of CPU cycles required to execute this instruction.
+        /// Assumes no exceptions are thrown, and that the cases mentioned in
+        /// the comments of this function do not apply.
         /// </summary>
         public int TicksRequired
         {
@@ -142,23 +144,25 @@ namespace RexSimulator.Hardware.Wramp
                             case Function.movsg:
 
                             case Function.lhi:
-                                return 4;
+
+                            // Note: An inc call can not be made by the WRAMP compiler,
+                            // though it could be crafted by a crafty user.
+                            case Function.inc:
+                                return 5;
 
                             case Function.mult:
-                                return 72;
+                                return 42;
 
                             case Function.multu:
-                                return 70;
+                                return 41;
 
                             case Function.div:
                             case Function.rem:
-                                return 74;
+                                return 44;
 
                             case Function.divu:
                             case Function.remu:
-                                return 71;
-
-                            case Function.inc:
+                                return 43;
 
                             default:
                                 throw new InvalidOperationException("Unknown Instruction!");
@@ -168,16 +172,21 @@ namespace RexSimulator.Hardware.Wramp
                     case Opcode.jr:
                     case Opcode.beqz: //Note: 1 additional tick if the branch is taken
                     case Opcode.bnez: //Note: 1 additional tick if the branch is taken
-                        return 4;
-
-                    case Opcode.lw:
-                    case Opcode.sw:
-                    case Opcode.jal:
-                    case Opcode.jalr:
                         return 5;
 
+                    case Opcode.lw:   //Note: 2 additional ticks if in user mode
+                        return 7;
+
+                    case Opcode.sw:   //Note: 2 additional ticks if in user mode
+                    case Opcode.jal:
+                    case Opcode.jalr:
+                        return 6;
+
+                    // Default includes break, syscall, rfe
+                    // An unknown instruction will cause a GPF in SimpleWrampCPU.ExecuteInstruction(),
+                    // so we don't need to throw one here.
                     default:
-                        return 4; //Note: an unknown instruction will cause a GPF.
+                        return 5;
                 }
             }
         }

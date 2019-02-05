@@ -58,11 +58,11 @@ namespace RexSimulator.Hardware
             CPU = new SimpleWrampCpu(mAddressBus, mDataBus, mIrqs, mCs);
 
             //Memory and Memory-mapped IO
-            RAM = new MemoryDevice(0x00000, 0x20000, mAddressBus, mDataBus, "Memory (RAM)");
+            RAM = new MemoryDevice(0x00000, 0x04000, mAddressBus, mDataBus, "Memory (RAM)");
             Serial1 = new SerialIO(0x70000, 5, mAddressBus, mDataBus, "Serial Port 1");
             Serial2 = new SerialIO(0x71000, 5, mAddressBus, mDataBus, "Serial Port 2");
             Timer = new Timer(0x72000, 4, mAddressBus, mDataBus, "Timer");
-            Parallel = new ParallelIO(0x73000, 6, mAddressBus, mDataBus, "Parallel Port");
+            Parallel = new ParallelIO(0x73000, 11, mAddressBus, mDataBus, "Parallel Port");
             ROM = new MemoryDevice(0x80000, 0x40000, mAddressBus, mDataBus, "Memory (ROM)");
             InterruptButton = new ButtonInterrupt(0x7f000, 1, mAddressBus, mDataBus, "Interrupt Button");
 
@@ -78,12 +78,34 @@ namespace RexSimulator.Hardware
         #endregion
 
         #region Public Methods
+
+        System.Threading.ManualResetEvent mTickEnabler;
+        public void SetTickEnabler(System.Threading.ManualResetEvent tickEnabler)
+        {
+            mTickEnabler = tickEnabler;
+        }
+        public void AllowTicks()
+        {
+            if (mTickEnabler != null) 
+            {
+                mTickEnabler.Set();
+            }
+        }
+        private void DisallowTicks()
+        {
+            if (mTickEnabler != null)
+            {
+                mTickEnabler.Reset();
+            }
+        }
+
         /// <summary>
         /// Performs a hard-reset of the board, and internal components.
         /// </summary>
         /// <param name="keepMemoryState">True if you want to preserve the contents of RAM.</param>
         public void Reset(bool keepMemoryState)
         {
+            DisallowTicks();
             CPU.Reset();
 
             if(!keepMemoryState)
@@ -94,6 +116,7 @@ namespace RexSimulator.Hardware
             Timer.Reset();
             Parallel.Reset();
             //ROM.Reset();
+            AllowTicks();
         }
 
         /// <summary>
