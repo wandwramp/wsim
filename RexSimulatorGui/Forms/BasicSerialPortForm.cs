@@ -158,12 +158,7 @@ namespace RexSimulatorGui.Forms
             this.Hide();
         }
 
-        /// <summary>
-        /// Upload a file.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void sendFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UploadFileDialog()
         {
             if (mUploadFileWorker != null && mUploadFileWorker.ThreadState == System.Threading.ThreadState.Running)
                 mUploadFileWorker.Abort();
@@ -178,6 +173,16 @@ namespace RexSimulatorGui.Forms
         }
 
         /// <summary>
+        /// Upload a file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void sendFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UploadFileDialog();
+        }
+
+        /// <summary>
         /// Transmit a keypress to the board.
         /// </summary>
         /// <param name="sender"></param>
@@ -185,7 +190,14 @@ namespace RexSimulatorGui.Forms
         private void serialTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
-            mSerialPort.SendAsync(e.KeyChar);
+            if (Control.ModifierKeys == Keys.Control)
+            {
+                UploadFileDialog();
+            }
+            else
+            {
+                mSerialPort.SendAsync(e.KeyChar);
+            }
         }
 
         /// <summary>

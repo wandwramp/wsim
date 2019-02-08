@@ -285,11 +285,12 @@ namespace RexSimulatorGui.Controls
             // these magic numbers give approximately 40px of space
             // between each label.
             DrawIRQ(g, "Interrupts:", mBoard.mIrqs.Value != 0, 5, 550);
-            DrawIRQ(g, "Button", mBoard.mIrqs.GetBit(1), 150, 550);
-            DrawIRQ(g, "Timer", mBoard.mIrqs.GetBit(2), 250, 550);
-            DrawIRQ(g, "Parallel", mBoard.mIrqs.GetBit(3), 340, 550);
-            DrawIRQ(g, "Serial 1", mBoard.mIrqs.GetBit(4), 460, 550);
-            DrawIRQ(g, "Serial 2", mBoard.mIrqs.GetBit(5), 580, 550);
+            
+            DrawIRQ(g, "Button",   mBoard.mIrqs.GetBit(1) && (mBoard.CPU.mSpRegisters[RexSimulator.Hardware.Wramp.RegisterFile.SpRegister.cctrl] & (1 << 5)) != 0, 150, 550);
+            DrawIRQ(g, "Timer",    mBoard.mIrqs.GetBit(2) && (mBoard.CPU.mSpRegisters[RexSimulator.Hardware.Wramp.RegisterFile.SpRegister.cctrl] & (1 << 6)) != 0, 250, 550);
+            DrawIRQ(g, "Parallel", mBoard.mIrqs.GetBit(3) && (mBoard.CPU.mSpRegisters[RexSimulator.Hardware.Wramp.RegisterFile.SpRegister.cctrl] & (1 << 7)) != 0, 340, 550);
+            DrawIRQ(g, "Serial 1", mBoard.mIrqs.GetBit(4) && (mBoard.CPU.mSpRegisters[RexSimulator.Hardware.Wramp.RegisterFile.SpRegister.cctrl] & (1 << 8)) != 0, 460, 550);
+            DrawIRQ(g, "Serial 2", mBoard.mIrqs.GetBit(5) && (mBoard.CPU.mSpRegisters[RexSimulator.Hardware.Wramp.RegisterFile.SpRegister.cctrl] & (1 << 9)) != 0, 580, 550);
         }
 
         private void DrawLeds(Graphics g)
@@ -352,7 +353,7 @@ namespace RexSimulatorGui.Controls
             g.FillRectangle(b, p.X - mSwitchBorderSize.Width / 2, p.Y - mSwitchBorderSize.Height / 2, mSwitchBorderSize.Width, mSwitchBorderSize.Height);
             
             bool on = ((mBoard.Parallel.Switches & (1 << switchNo)) != 0);
-            int y = on ? mSwitchSize.Height : -mSwitchSize.Height;
+            int y = on ? -mSwitchSize.Height : mSwitchSize.Height;
             y += p.Y;
             g.FillRectangle(b, p.X - mSwitchBorderSize.Width / 2, p.Y - mSwitchBorderSize.Height / 2, mSwitchBorderSize.Width, mSwitchBorderSize.Height);
 
