@@ -68,17 +68,16 @@
             this.groupBox1.Controls.Add(this.serialForm1Checkbox);
             this.groupBox1.Location = new System.Drawing.Point(13, 585);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(666, 112);
+            this.groupBox1.Size = new System.Drawing.Size(689, 112);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Show Forms";
             // 
             // interruptButtonCheckbox
             // 
-            this.interruptButtonCheckbox.AutoSize = true;
             this.interruptButtonCheckbox.Location = new System.Drawing.Point(377, 43);
             this.interruptButtonCheckbox.Name = "interruptButtonCheckbox";
-            this.interruptButtonCheckbox.Size = new System.Drawing.Size(99, 17);
+            this.interruptButtonCheckbox.Size = new System.Drawing.Size(147, 17);
             this.interruptButtonCheckbox.TabIndex = 6;
             this.interruptButtonCheckbox.Text = "Interrupt Button";
             this.interruptButtonCheckbox.UseVisualStyleBackColor = true;
@@ -86,10 +85,9 @@
             // 
             // timerConfigCheckbox
             // 
-            this.timerConfigCheckbox.AutoSize = true;
             this.timerConfigCheckbox.Location = new System.Drawing.Point(530, 89);
             this.timerConfigCheckbox.Name = "timerConfigCheckbox";
-            this.timerConfigCheckbox.Size = new System.Drawing.Size(99, 17);
+            this.timerConfigCheckbox.Size = new System.Drawing.Size(153, 17);
             this.timerConfigCheckbox.TabIndex = 5;
             this.timerConfigCheckbox.Text = "Timer Registers";
             this.timerConfigCheckbox.UseVisualStyleBackColor = true;
@@ -97,10 +95,9 @@
             // 
             // parallelConfigCheckbox
             // 
-            this.parallelConfigCheckbox.AutoSize = true;
             this.parallelConfigCheckbox.Location = new System.Drawing.Point(530, 66);
             this.parallelConfigCheckbox.Name = "parallelConfigCheckbox";
-            this.parallelConfigCheckbox.Size = new System.Drawing.Size(129, 17);
+            this.parallelConfigCheckbox.Size = new System.Drawing.Size(153, 17);
             this.parallelConfigCheckbox.TabIndex = 5;
             this.parallelConfigCheckbox.Text = "Parallel Port Registers";
             this.parallelConfigCheckbox.UseVisualStyleBackColor = true;
@@ -108,10 +105,9 @@
             // 
             // serialConfig2Checkbox
             // 
-            this.serialConfig2Checkbox.AutoSize = true;
             this.serialConfig2Checkbox.Location = new System.Drawing.Point(530, 43);
             this.serialConfig2Checkbox.Name = "serialConfig2Checkbox";
-            this.serialConfig2Checkbox.Size = new System.Drawing.Size(130, 17);
+            this.serialConfig2Checkbox.Size = new System.Drawing.Size(153, 18);
             this.serialConfig2Checkbox.TabIndex = 5;
             this.serialConfig2Checkbox.Text = "Serial Port 2 Registers";
             this.serialConfig2Checkbox.UseVisualStyleBackColor = true;
@@ -119,10 +115,9 @@
             // 
             // serialConfig1Checkbox
             // 
-            this.serialConfig1Checkbox.AutoSize = true;
             this.serialConfig1Checkbox.Location = new System.Drawing.Point(530, 20);
             this.serialConfig1Checkbox.Name = "serialConfig1Checkbox";
-            this.serialConfig1Checkbox.Size = new System.Drawing.Size(130, 17);
+            this.serialConfig1Checkbox.Size = new System.Drawing.Size(153, 17);
             this.serialConfig1Checkbox.TabIndex = 5;
             this.serialConfig1Checkbox.Text = "Serial Port 1 Registers";
             this.serialConfig1Checkbox.UseVisualStyleBackColor = true;
@@ -130,10 +125,9 @@
             // 
             // memoryCheckbox
             // 
-            this.memoryCheckbox.AutoSize = true;
             this.memoryCheckbox.Location = new System.Drawing.Point(377, 20);
             this.memoryCheckbox.Name = "memoryCheckbox";
-            this.memoryCheckbox.Size = new System.Drawing.Size(96, 17);
+            this.memoryCheckbox.Size = new System.Drawing.Size(147, 17);
             this.memoryCheckbox.TabIndex = 4;
             this.memoryCheckbox.Text = "Memory (RAM)";
             this.memoryCheckbox.UseVisualStyleBackColor = true;
@@ -141,10 +135,9 @@
             // 
             // sprCheckbox
             // 
-            this.sprCheckbox.AutoSize = true;
             this.sprCheckbox.Location = new System.Drawing.Point(162, 44);
             this.sprCheckbox.Name = "sprCheckbox";
-            this.sprCheckbox.Size = new System.Drawing.Size(150, 17);
+            this.sprCheckbox.Size = new System.Drawing.Size(209, 17);
             this.sprCheckbox.TabIndex = 3;
             this.sprCheckbox.Text = "Special Purpose Registers";
             this.sprCheckbox.UseVisualStyleBackColor = true;
@@ -152,10 +145,9 @@
             // 
             // gprCheckbox
             // 
-            this.gprCheckbox.AutoSize = true;
             this.gprCheckbox.Location = new System.Drawing.Point(162, 20);
             this.gprCheckbox.Name = "gprCheckbox";
-            this.gprCheckbox.Size = new System.Drawing.Size(152, 17);
+            this.gprCheckbox.Size = new System.Drawing.Size(209, 17);
             this.gprCheckbox.TabIndex = 2;
             this.gprCheckbox.Text = "General Purpose Registers";
             this.gprCheckbox.UseVisualStyleBackColor = true;
@@ -163,10 +155,9 @@
             // 
             // serialForm2Checkbox
             // 
-            this.serialForm2Checkbox.AutoSize = true;
             this.serialForm2Checkbox.Location = new System.Drawing.Point(7, 44);
             this.serialForm2Checkbox.Name = "serialForm2Checkbox";
-            this.serialForm2Checkbox.Size = new System.Drawing.Size(83, 17);
+            this.serialForm2Checkbox.Size = new System.Drawing.Size(149, 16);
             this.serialForm2Checkbox.TabIndex = 1;
             this.serialForm2Checkbox.Text = "Serial Port 2";
             this.serialForm2Checkbox.UseVisualStyleBackColor = true;
@@ -174,12 +165,11 @@
             // 
             // serialForm1Checkbox
             // 
-            this.serialForm1Checkbox.AutoSize = true;
             this.serialForm1Checkbox.Checked = true;
             this.serialForm1Checkbox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.serialForm1Checkbox.Location = new System.Drawing.Point(7, 20);
             this.serialForm1Checkbox.Name = "serialForm1Checkbox";
-            this.serialForm1Checkbox.Size = new System.Drawing.Size(83, 17);
+            this.serialForm1Checkbox.Size = new System.Drawing.Size(149, 17);
             this.serialForm1Checkbox.TabIndex = 0;
             this.serialForm1Checkbox.Text = "Serial Port 1";
             this.serialForm1Checkbox.UseVisualStyleBackColor = true;
@@ -195,7 +185,7 @@
             this.groupBox2.Controls.Add(this.cbFullSpeed);
             this.groupBox2.Controls.Add(this.stepButton);
             this.groupBox2.Controls.Add(this.runButton);
-            this.groupBox2.Location = new System.Drawing.Point(685, 585);
+            this.groupBox2.Location = new System.Drawing.Point(818, 585);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(108, 112);
             this.groupBox2.TabIndex = 2;
@@ -204,10 +194,9 @@
             // 
             // cbFullSpeed
             // 
-            this.cbFullSpeed.AutoSize = true;
             this.cbFullSpeed.Location = new System.Drawing.Point(7, 78);
             this.cbFullSpeed.Name = "cbFullSpeed";
-            this.cbFullSpeed.Size = new System.Drawing.Size(76, 17);
+            this.cbFullSpeed.Size = new System.Drawing.Size(91, 17);
             this.cbFullSpeed.TabIndex = 11;
             this.cbFullSpeed.Text = "Full Speed";
             this.cbFullSpeed.UseVisualStyleBackColor = true;
@@ -240,9 +229,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 731);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 706);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(801, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(928, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -262,14 +251,14 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(79, 17);
-            this.toolStripStatusLabel1.Text = "Rex Simulator";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(35, 17);
+            this.toolStripStatusLabel1.Text = "wsim";
+            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
             // 
             // RexBoardForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(795, 728);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(928, 728);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -281,9 +270,7 @@
             this.Load += new System.EventHandler(this.RexBoardForm_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.RexBoardForm_Paint);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -312,7 +299,5 @@
         private System.Windows.Forms.CheckBox cbFullSpeed;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-
-
     }
 }

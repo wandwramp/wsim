@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RexSimulatorGui")]
 [assembly: AssemblyDescription("GUI for the Rex Simulator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("University of Waikato")]
+[assembly: AssemblyCompany("WAND, University of Waikato")]
 [assembly: AssemblyProduct("RexSimulatorGui")]
-[assembly: AssemblyCopyright("Copyright ©  2016 Paul Monigatti")]
+[assembly: AssemblyCopyright("Copyright © 2016 Paul Monigatti, 2019 Daniel Oosterwijk")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0")]
-[assembly: AssemblyFileVersion("2.0")]
+[assembly: AssemblyVersion("3.2.0")]
+[assembly: AssemblyFileVersion("3.2.0")]

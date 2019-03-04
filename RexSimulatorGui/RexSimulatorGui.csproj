@@ -54,6 +54,12 @@
     <Compile Include="Controls\RexWidget.Designer.cs">
       <DependentUpon>RexWidget.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BasicSerialPortForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\RexWidget.resx">
       <DependentUpon>RexWidget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicSerialPortForm.resx">
       <DependentUpon>BasicSerialPortForm.cs</DependentUpon>
@@ -126,7 +135,6 @@
     </Compile>
     <None Include="Resources\monitor.srec" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\RexSimulator\RexSimulator.csproj">
       <Project>{94789FFC-1AE2-4B92-8048-FD8B05BF8A7F}</Project>
