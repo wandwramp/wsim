@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RexSimulator")]
 [assembly: AssemblyDescription("Simulates the REX board and WRAMP processor.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("University of Waikato")]
+[assembly: AssemblyCompany("WAND, University of Waikato")]
 [assembly: AssemblyProduct("RexSimulator")]
-[assembly: AssemblyCopyright("Copyright © 2016 Paul Monigatti")]
+[assembly: AssemblyCopyright("Copyright © 2016 Paul Monigatti, 2019 Daniel Oosterwijk")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using RexSimulator.Hardware;
@@ -11,6 +8,7 @@ using System.IO;
 using RexSimulatorGui.Properties;
 using System.Threading;
 using RexSimulator.Hardware.Wramp;
+using System.Reflection;
 
 namespace RexSimulatorGui.Forms
 {
@@ -58,6 +56,9 @@ namespace RexSimulatorGui.Forms
         public RexBoardForm()
         {
             InitializeComponent();
+
+            //Set up form contents
+            ResetToolStripStatusLabel();
 
             //Set up all REX and WRAMP hardware
             mRexBoard = rexWidget1.mBoard;
@@ -250,6 +251,27 @@ namespace RexSimulatorGui.Forms
 
         #region Private Methods
         /// <summary>
+        /// Resets the toolstrip to show the version of the program.
+        /// </summary>
+        private void ResetToolStripStatusLabel()
+        {
+            string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+            version = version.Substring(0, version.Length - 2); // We don't care about the revision number, since we follow semver's major.minor.patch format.
+            toolStripStatusLabel1.Text = $"wsim v{version}";
+        }
+
+        /// <summary>
+        /// Opens an about dialog when the version label is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+            AboutBox aboutBox = new AboutBox();
+            aboutBox.Show();
+        }
+
+        /// <summary>
         /// Recalculate the simulated CPU clock rate.
         /// </summary>
         /// <param name="sender"></param>
@@ -272,6 +294,10 @@ namespace RexSimulatorGui.Forms
             {
                 statusStrip1.BackColor = Color.Red;
                 toolStripStatusLabel1.Text = "WARNING: User Mode Enabled (Alpha Feature)";
+            }
+            else
+            {
+                ResetToolStripStatusLabel();
             }
             rexWidget1.Invalidate();
         }
