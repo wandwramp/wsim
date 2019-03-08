@@ -12,7 +12,7 @@ namespace RexSimulator.Hardware.Rex
         /// <summary>
         /// Set this to the board's primary clock rate. It is used to determine how many clock cycles are required to transmit/receive serial data.
         /// </summary>
-        private readonly uint SYSTEM_CLOCK_RATE = 4000000;
+        private readonly uint SYSTEM_CLOCK_RATE = 6250000;
         #endregion
 
         #region Member Variables
@@ -182,7 +182,7 @@ namespace RexSimulator.Hardware.Rex
             {
                 mMemory[i] = 0;
             }
-            Control = 0xC5; //8 data bits, no parity, 1 stop bit, 9600 baud
+            Control = 0xC7; //8 data bits, no parity, 1 stop bit, 38400 baud
             Status = 0x02;
             Interrupt(false);
         }
