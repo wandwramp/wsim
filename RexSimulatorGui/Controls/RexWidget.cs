@@ -439,6 +439,9 @@ namespace RexSimulatorGui.Controls
             switch (mActiveControl)
             {
                 case ControlWithFocus.Reset:
+                    mBoard.Reset();
+                    break;
+
                 case ControlWithFocus.SoftReset:
                     uint switchBk = mBoard.Parallel.Switches;
                     mBoard.Reset();
