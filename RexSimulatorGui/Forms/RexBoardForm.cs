@@ -153,8 +153,8 @@ namespace RexSimulatorGui.Forms
                 {
                     physPC += mRexBoard.CPU.mSpRegisters[RegisterFile.SpRegister.rbase];
                 }
-
-                if (mRunning && mRamForm.Breakpoints.Contains(physPC)) //stop the CPU if a breakpoint has been hit
+                //stop the CPU if a breakpoint has been hit and we're not trying to step over it
+                if (!mStepping && mRunning && mRamForm.Breakpoints.Contains(physPC))
                 {
                     this.Invoke(new Action(runButton.PerformClick));
                     continue;
