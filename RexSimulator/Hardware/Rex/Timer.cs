@@ -89,7 +89,7 @@ namespace RexSimulator.Hardware.Rex
         {
             if (tickCount-- == 0)
             {
-                tickCount = 1667; //about 2400 Hz, assuming a 4 MHz system clock
+                tickCount = 2604; //about 2400 Hz, assuming a 6.25MHz system clock
                
                 //Do timer events
                 if ((Control & 1) != 0) //if enabled
