@@ -167,7 +167,10 @@ namespace RexSimulatorGui.Forms
         /// <param name="e"></param>
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //listView1.BeginUpdate();
+            // Stop the ListView from redrawing until we're done throwing new items at it
+            // Vastly improves performance when a lot of memory has changed.
+            memoryListView.BeginUpdate();
+
             //Update all changed memory locations
             for (uint i = 0; i < mDevice.Size; i++)
             {
@@ -177,8 +180,6 @@ namespace RexSimulatorGui.Forms
                     uint value = mDevice[address];
                     mIr.Instruction = value;
                     mShadow[i] = value;
-
-                    memoryListView.RedrawItems((int)i, (int)i, true);
 
                     mVirtualItems[i].SubItems[2].Text = value.ToString("X8");
                     mVirtualItems[i].SubItems[3].Text = mIr.ToString();
@@ -223,9 +224,6 @@ namespace RexSimulatorGui.Forms
                 SetPointerText(newRbase, "$rbase ", true);
                 SetPointerText(newPtable, "$ptable ", true);
 
-                //Redraw any affected items
-                RedrawItem(mPc, mSp, mRa, mEvec, mEar, mRbase, mPtable, newPc, newSp, newSp, newRa, newEvec, newEvec, newRbase, newPtable);
-
                 mPc = newPc;
                 mSp = newSp;
                 mRa = newRa;
@@ -236,7 +234,7 @@ namespace RexSimulatorGui.Forms
                 mRbase = newRbase;
                 mPtable = newPtable;
             }
-            //listView1.EndUpdate();
+            memoryListView.EndUpdate();
         }
 
         private void memoryListView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
