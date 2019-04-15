@@ -34,7 +34,7 @@ namespace RexSimulator.Hardware
     public class SimpleWrampCpu
     {
         #region WRAMP Interface
-        private Bus mAddressBus, mDataBus, mIrqs, mCs;
+        private Bus mAddressBus, mDataBus, mIrqs;
         private int mTicksToNextInstruction = -1;
         #endregion
 
@@ -90,12 +90,11 @@ namespace RexSimulator.Hardware
         /// <param name="dataBus">The data bus.</param>
         /// <param name="irqs">The interrupt request lines (IRQs).</param>
         /// <param name="cs">The chip-select lines.</param>
-        public SimpleWrampCpu(Bus addressBus, Bus dataBus, Bus irqs, Bus cs)
+        public SimpleWrampCpu(Bus addressBus, Bus dataBus, Bus irqs)
         {
             mAddressBus = addressBus;
             mDataBus = dataBus;
             mIrqs = irqs;
-            mCs = cs;
 
             mGpRegisters = new RegisterFile("General Purpose Registers");
             mSpRegisters = new RegisterFile("Special Purpose Registers");

@@ -43,7 +43,6 @@ namespace RexSimulator.Hardware
         public readonly Bus mDataBus;
         public readonly Bus mAddressBus;
         public readonly Bus mIrqs;
-        public readonly Bus mCs;
 
         public readonly SimpleWrampCpu CPU;
 
@@ -76,7 +75,7 @@ namespace RexSimulator.Hardware
             mIrqs = new Bus();
 
             //Initialise other components
-            CPU = new SimpleWrampCpu(mAddressBus, mDataBus, mIrqs, mCs);
+            CPU = new SimpleWrampCpu(mAddressBus, mDataBus, mIrqs);
 
             //Memory and Memory-mapped IO
             RAM = new MemoryDevice(0x00000, 0x04000, mAddressBus, mDataBus, "Memory (RAM)");
