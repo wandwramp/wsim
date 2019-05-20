@@ -82,6 +82,7 @@ namespace RexSimulatorGui.Forms
             // 
             this.serialLabel.AllowDrop = true;
             this.serialLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.serialLabel.ForeColor = System.Drawing.Color.Black;
             this.serialLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.serialLabel.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.serialLabel.Location = new System.Drawing.Point(0, 24);
