@@ -279,6 +279,7 @@ namespace RexSimulatorGui.Forms
             string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
             version = version.Substring(0, version.Length - 2); // We don't care about the revision number, since we follow semver's major.minor.patch format.
             toolStripStatusLabel1.Text = $"wsim v{version}";
+            statusStrip1.BackColor = SystemColors.Control;
         }
 
         /// <summary>

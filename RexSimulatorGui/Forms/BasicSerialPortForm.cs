@@ -324,6 +324,15 @@ namespace RexSimulatorGui.Forms
 
                             mCX = Math.Min(Math.Max(0, x), NUM_COLS) - 1;
                             mCY = Math.Min(Math.Max(0, y), NUM_ROWS) - 1;
+
+                            if (mCX < 0)
+                                mCX = 0;
+                            if (mCX >= NUM_COLS)
+                                mCX = NUM_COLS;
+                            if (mCY < 0)
+                                mCY = 0;
+                            if (mCY >= NUM_ROWS)
+                                mCY = NUM_ROWS;
                         }
                         catch { }
                         mEscapeSequence = null;

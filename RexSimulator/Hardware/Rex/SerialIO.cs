@@ -264,7 +264,11 @@ namespace RexSimulator.Hardware.Rex
                     if (SerialDataTransmitted != null)
                         SerialDataTransmitted(this, new SerialEventArgs(Transmit));
                     if ((Control & 0x200u) != 0)
+                    {
+                        uint oldIack = InterruptAck;
                         Interrupt(true);
+                        InterruptAck = oldIack | 2;  // Set TDS Interrupt bit
+                    }
                     Status |= 0x00000002;
                 }
             }
@@ -277,7 +281,11 @@ namespace RexSimulator.Hardware.Rex
                     mMemory[1] = mRecvValue;
                     Status |= 0x00000001;
                     if ((Control & 0x100u) != 0)
+                    {
+                        uint oldIack = InterruptAck;
                         Interrupt(true);
+                        InterruptAck = oldIack | 1;  // Set RDR Interrupt bit - redundant, but explicit
+                    }
                 }
                 mClocksToReceive--;
             }
