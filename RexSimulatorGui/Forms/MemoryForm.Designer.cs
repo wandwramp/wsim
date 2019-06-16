@@ -90,17 +90,17 @@ namespace RexSimulatorGui.Forms
             // columnHeader1
             // 
             this.columnHeader1.Text = "Pointer";
-            this.columnHeader1.Width = 80;
+            this.columnHeader1.Width = 85;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Address";
-            this.columnHeader2.Width = 80;
+            this.columnHeader2.Width = 85;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Value";
-            this.columnHeader3.Width = 80;
+            this.columnHeader3.Width = 85;
             // 
             // columnHeader4
             // 
