@@ -133,8 +133,8 @@ WRAMPmon, or during other long-running computations.
 
 ### Breakpoints
 
-If you want to pause execution at a particular time in your program, you can set
-a breakpoint on a particular instruction. With the `Memory (RAM)` form open,
+If you want to pause execution at a particular instruction in your program, you
+can set a breakpoint on that instruction. With the `Memory (RAM)` form open,
 double-click on any memory address. The `Address` field will change to show a
 `[B]` label next to the address of the instruction, indicating the presence of a
 breakpoint. When the program counter reaches this instruction, execution will
