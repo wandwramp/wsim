@@ -45,6 +45,7 @@ namespace RexSimulatorGui.Forms
         #endregion
 
         #region Member Vars
+        private Quacker quacker;
         private SerialIO mSerialPort;
         private Thread mUploadFileWorker;
         private StringBuilder mRecvBuffer;
@@ -255,9 +256,12 @@ namespace RexSimulatorGui.Forms
             {
                 switch (c)
                 {
+                    // This is the bell character. It quacks.
                     case (char)0x07:
-                        SoundPlayer sp = new SoundPlayer(Resources.duck_quack);
-                        sp.Play();
+                        if (quacker != null) 
+                        {
+                            quacker.Quack();
+                        }
                         break;
 
                     case '\r':
@@ -442,6 +446,14 @@ namespace RexSimulatorGui.Forms
         {
             if (mUploadFileWorker != null && mUploadFileWorker.ThreadState == System.Threading.ThreadState.Running)
                 mUploadFileWorker.Abort();
+        }
+
+        /// <summary>
+        /// Sets the quacker to use to play sound.
+        /// </summary>
+        public void SetQuacker(Quacker _quacker)
+        {
+            quacker = _quacker;
         }
         #endregion
     }
