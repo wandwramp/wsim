@@ -1,5 +1,16 @@
 # Change History for wsim and rexsim
 
+## 3.3.3
+
+* The duck can only quack once at a time
+  * This makes it sound a lot better when clicking on it
+  * It also fixes a bug reported by Liam Jamieson, where making a program which continually sends
+    the bell character to the serial port will cause the simulator to use all your CPU and quack
+    uncontrollably. This was caused by the fact that a new SoundPlayer was created every time a
+    bell was sent, loading the resource again and sending a new call to the sound API. Now, there
+    is a single SoundPlayer which has a timeout, enforced by the new Quacker class which has a
+    single instance passed around.
+
 ## 3.3.2
 
 * Memory form is wide enough to see the \[B\] mark when a breakpoint is set
