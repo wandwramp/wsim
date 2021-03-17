@@ -1,4 +1,38 @@
-# Change History for rexsim
+# Change History for wsim and rexsim
+
+## 3.3.2
+
+* Memory form is wide enough to see the \[B\] mark when a breakpoint is set
+* The Run button functions when on a breakpoint
+* Documentation updates
+
+## 3.3.1
+
+* Update WRAMPmon to 0.9
+* Stop text in the serial port form being invisible when the program is run under a dark theme
+* Stop the program crashing on certain invalid escape sequences which place the cursor out of bounds
+* User mode warning colour disappears correctly when switched off
+* Serial interrupt register TDS is set correctly
+
+## 3.3.0
+
+* Updates RexSimulator module to v3.1.2
+  * Timer is set up for the new 6.25MHz clock
+* Improve memory form performance when a lot of changes occur
+* Stepping over breakpoints works properly
+* Hard reset (upper right red button) also resets switches
+* Serial port bell quacks instead of beeping
+
+## 3.2.1
+
+* Updates RexSimulator module to v3.1.1
+* Corrects the speed of the serial devices to account for environments which don't run WRAMPmon, and the new clockrate.
+
+## 3.2.0
+
+* FEATURE: The program version is displayed in the status bar at the bottom. When clicked, an about dialog will appear.
+* BUGFIX: Controls now scale correctly on both Windows and Linux. This was fixed by disabling scaling.
+* The assembly info has been changed to more correctly display ownership, and visual branding has been changed to wsim rather than RexSimulator. Most of the code and the AssemblyTitle still refer to RexSimulator.
 
 ## 3.1.0
 
