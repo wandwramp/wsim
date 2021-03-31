@@ -91,6 +91,7 @@
       <DependentUpon>RexBoardForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="Quacker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\RexWidget.resx">
       <DependentUpon>RexWidget.cs</DependentUpon>

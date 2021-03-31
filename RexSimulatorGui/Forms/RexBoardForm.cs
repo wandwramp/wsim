@@ -30,6 +30,7 @@ using RexSimulatorGui.Properties;
 using System.Threading;
 using RexSimulator.Hardware.Wramp;
 using System.Reflection;
+using System.Media;
 
 namespace RexSimulatorGui.Forms
 {
@@ -109,6 +110,11 @@ namespace RexSimulatorGui.Forms
             mParallelConfigForm = new PeripheralMemoryForm(mRexBoard.Parallel);
             mTimerConfigForm = new PeripheralMemoryForm(mRexBoard.Timer);
             
+            // All the sound sources share a single quacker to ensure there's no overlap.
+            Quacker quacker = new Quacker(Resources.duck_quack);
+            rexWidget1.SetQuacker(quacker);
+            mSerialForm1.SetQuacker(quacker);
+            mSerialForm2.SetQuacker(quacker);
 
             //Add all forms to the list of subforms
             mSubforms.Add(mSerialForm1);

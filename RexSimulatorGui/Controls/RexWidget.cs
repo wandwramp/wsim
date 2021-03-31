@@ -114,6 +114,7 @@ namespace RexSimulatorGui.Controls
 
         
         private ControlWithFocus mActiveControl = ControlWithFocus.None;
+        private Quacker quacker;
         #endregion
 
         public RexWidget()
@@ -453,8 +454,10 @@ namespace RexSimulatorGui.Controls
                     break;
 
                 case ControlWithFocus.Duck:
-                    SoundPlayer sp = new SoundPlayer(Resources.duck_quack);
-                    sp.Play();
+                    if (quacker != null) 
+                    {
+                        quacker.Quack();
+                    }
                     break;
             }
 
@@ -497,6 +500,14 @@ namespace RexSimulatorGui.Controls
         public void LoadSrec(Stream stream)
         {
             mBoard.LoadSrec(stream);
+        }
+
+        /// <summary>
+        /// Sets the quacker to use to play sound.
+        /// </summary>
+        public void SetQuacker(Quacker _quacker)
+        {
+            quacker = _quacker;
         }
         #endregion
     }

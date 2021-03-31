@@ -1,4 +1,49 @@
-# Change History for rexsim
+# Change History for wsim and rexsim
+
+## 3.3.3
+
+* The duck can only quack once at a time
+  * This makes it sound a lot better when clicking on it
+  * It also fixes a bug reported by Liam Jamieson, where making a program which continually sends
+    the bell character to the serial port will cause the simulator to use all your CPU and quack
+    uncontrollably. This was caused by the fact that a new SoundPlayer was created every time a
+    bell was sent, loading the resource again and sending a new call to the sound API. Now, there
+    is a single SoundPlayer which has a timeout, enforced by the new Quacker class which has a
+    single instance passed around.
+
+## 3.3.2
+
+* Memory form is wide enough to see the \[B\] mark when a breakpoint is set
+* The Run button functions when on a breakpoint
+* Documentation updates
+
+## 3.3.1
+
+* Update WRAMPmon to 0.9
+* Stop text in the serial port form being invisible when the program is run under a dark theme
+* Stop the program crashing on certain invalid escape sequences which place the cursor out of bounds
+* User mode warning colour disappears correctly when switched off
+* Serial interrupt register TDS is set correctly
+
+## 3.3.0
+
+* Updates RexSimulator module to v3.1.2
+  * Timer is set up for the new 6.25MHz clock
+* Improve memory form performance when a lot of changes occur
+* Stepping over breakpoints works properly
+* Hard reset (upper right red button) also resets switches
+* Serial port bell quacks instead of beeping
+
+## 3.2.1
+
+* Updates RexSimulator module to v3.1.1
+* Corrects the speed of the serial devices to account for environments which don't run WRAMPmon, and the new clockrate.
+
+## 3.2.0
+
+* FEATURE: The program version is displayed in the status bar at the bottom. When clicked, an about dialog will appear.
+* BUGFIX: Controls now scale correctly on both Windows and Linux. This was fixed by disabling scaling.
+* The assembly info has been changed to more correctly display ownership, and visual branding has been changed to wsim rather than RexSimulator. Most of the code and the AssemblyTitle still refer to RexSimulator.
 
 ## 3.1.0
 
