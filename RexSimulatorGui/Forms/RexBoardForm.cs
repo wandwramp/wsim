@@ -291,14 +291,33 @@ namespace RexSimulatorGui.Forms
         }
 
         /// <summary>
-        /// Opens an about dialog when the version label is clicked.
+        /// Opens an about dialog when the version label is clicked, or, if the
+        /// board is running slowly, opens a messagebox with some potential
+        /// fixes.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
         {
-            AboutBox aboutBox = new AboutBox();
-            aboutBox.Show();
+            if (toolStripStatusLabel1.Text.Contains("WRAMP is running slowly!"))
+            {
+                MessageBox.Show(
+                    "If wsim is running slowly, you're probably in a virtual machine on Windows." + Environment.NewLine +
+                    "The best way to get around this is by running Linux! If you're confident, try finding some instructions on how to run a live CD of Ubuntu! Otherwise, keep reading." + Environment.NewLine + Environment.NewLine +
+                    "If you're running Windows 10 Home, your computer doesn't support virtualisation (also known as Hyper-V, VT-x, or VT-d). This will almost certainly cause performance issues." + Environment.NewLine +
+                    "Try asking your lecturer or tutor if they know how to obtain a license key for Windows 10 Professional from Microsoft Azure Education." + Environment.NewLine + Environment.NewLine +
+                    "If you're already using Windows 10 Professional, and virtualisation is turned on, you probably need to increase the number of CPU cores allocated to your VM. 2 is a good minimum, but 4 should be comfortable. Make sure you also give it a decent amount of RAM!" + Environment.NewLine + Environment.NewLine +
+                    "Another way to get better performance is to run wsim directly under Windows with a copy downloaded from Github. It can be tricky to set up shared folders in way that makes it easy to get the .srec files out from the VM though, so good luck :)",
+                    "WRAMP is running slowly!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation
+                );
+            }
+            else
+            {
+                AboutBox aboutBox = new AboutBox();
+                aboutBox.Show();
+            }
         }
 
         /// <summary>
@@ -324,6 +343,14 @@ namespace RexSimulatorGui.Forms
             {
                 statusStrip1.BackColor = Color.Red;
                 toolStripStatusLabel1.Text = "WARNING: User Mode Enabled (Alpha Feature)";
+            }
+            // Set status message if the board is running slowly (<50%)
+            // This also enables the messagebox that can give tips on how to
+            // get around bad performance in VMs under Windows hosts.
+            else if (mRunning && (mLastClockRateSmoothed * 100 / TARGET_CLOCK_RATE) < 50)
+            {
+                statusStrip1.BackColor = Color.Yellow;
+                toolStripStatusLabel1.Text = "WARNING: WRAMP is running slowly! Click me for help!";
             }
             else
             {

@@ -247,6 +247,8 @@ namespace RexSimulator.Hardware.Wramp
                                 return string.Format("{0} ${1}, ${2}", Func, (RegisterFile.SpRegister)Rd, Rs);
                             case Function.movsg:
                                 return string.Format("{0} ${1}, ${2}", Func, Rd, (RegisterFile.SpRegister)Rs);
+                            case Function.lhi:
+                                return string.Format("{0} ${1}, 0x{2:X4}", Func, Rd, Immed16);
                         }
                     }
                     return string.Format("{0}i ${1}, ${2}, 0x{3:X4}", Func, Rd, Rs, Immed16);
