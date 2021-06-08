@@ -1,5 +1,10 @@
 # Change History for wsim and rexsim
 
+## 3.3.4
+
+* Add a warning notice to the status bar if low performance is detected.
+* Can be clicked to open a dialog with some tips about how to improve performance.
+
 ## 3.3.3
 
 * The duck can only quack once at a time
