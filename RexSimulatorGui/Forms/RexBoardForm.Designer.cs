@@ -286,6 +286,7 @@ namespace RexSimulatorGui.Forms
             this.Controls.Add(this.rexWidget1);
             this.MaximizeBox = false;
             this.Name = "RexBoardForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RexBoard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RexBoardForm_FormClosing);
             this.Load += new System.EventHandler(this.RexBoardForm_Load);
